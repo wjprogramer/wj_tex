@@ -88,6 +88,12 @@ class _TexViewState extends State<TexView> implements Parser {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
   List<Tex> parser() {
     List<Tex> result = List();
     String text = '';

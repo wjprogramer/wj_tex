@@ -16,11 +16,6 @@ Map specialCharMap = {
 
 abstract class Tex { }
 
-abstract class TexState {
-//  int height;
-//  int width;
-}
-
 abstract class Parser {
   List<Tex> parser();
 }
@@ -28,19 +23,10 @@ abstract class Parser {
 /// -----------------------------------------------------
 /// WIDGET
 
-class TexText extends StatefulWidget implements Tex {
+class TexText extends StatelessWidget implements Tex {
   final String input;
 
   TexText(this.input);
-
-  _TexTextState createState() => _TexTextState(input);
-}
-
-class _TexTextState extends State<TexText> implements TexState {
-
-  String input;
-
-  _TexTextState(this.input);
 
   @override
   Widget build(BuildContext context) {

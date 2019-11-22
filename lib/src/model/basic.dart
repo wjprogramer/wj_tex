@@ -26,7 +26,9 @@ abstract class Parser {
 class TexText extends StatelessWidget implements Tex {
   final String input;
 
-  TexText(this.input);
+  TexText(this.input) {
+    print('TexText: $input');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +46,9 @@ class TexFrac extends StatelessWidget implements Tex {
   // 分母
   final Widget denominator;
 
-  TexFrac(this.numerator, this.denominator);
+  TexFrac(this.numerator, this.denominator) {
+    print('TexFrac: $numerator / $denominator');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +76,9 @@ class TexFrac extends StatelessWidget implements Tex {
 class TexView extends StatefulWidget implements Tex {
   final String input;
 
-  TexView(this.input);
+  TexView(this.input) {
+    print('TexView: $input');
+  }
 
   @override
   _TexViewState createState() => _TexViewState();

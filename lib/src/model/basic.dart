@@ -152,6 +152,7 @@ class _TexViewState extends State<TexView> implements Parser {
         } break;
         default: {
           text += input[i];
+          print('i: $i, input len: ${input.length}');
           if (i == input.length - 1) {
             children.add(TexText(text));
           }

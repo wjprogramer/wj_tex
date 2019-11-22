@@ -81,14 +81,16 @@ class TexView extends StatefulWidget implements Tex {
   }
 
   @override
-  _TexViewState createState() => _TexViewState();
+  _TexViewState createState() => _TexViewState(input);
 }
 
 class _TexViewState extends State<TexView> implements Parser {
   List<Tex> children = List();
 
-  _TexViewState() {
-    if (widget.input.isNotEmpty) {
+  String input;
+
+  _TexViewState(this.input) {
+    if (input.isNotEmpty) {
       children = parser();
     }
   }
@@ -104,8 +106,8 @@ class _TexViewState extends State<TexView> implements Parser {
     List<Tex> result = List();
     String text = '';
 
-    for (int i = 0; i < widget.input.length; i++) {
-      switch(widget.input[i]) {
+    for (int i = 0; i < input.length; i++) {
+      switch(input[i]) {
         case '{': {
           if (StringUtils.isNotNullOrEmpty(text)) {
             children.add(TexText(text));
@@ -113,9 +115,9 @@ class _TexViewState extends State<TexView> implements Parser {
           }
 
           // 大括弧內的內容長度
-          int contentSize = TexUtils.getCorrespondParenthesesContentSize(widget.input.substring(i, widget.input.length));
+          int contentSize = TexUtils.getCorrespondParenthesesContentSize(input.substring(i, input.length));
           i += contentSize + 1; // 1代表後大括弧
-          children.add(TexView(widget.input.substring(i+1, i+contentSize+1)));
+          children.add(TexView(input.substring(i+1, i+contentSize+1)));
         } break;
         case '\\': {
           String key = getKeyword(i);
@@ -131,13 +133,13 @@ class _TexViewState extends State<TexView> implements Parser {
 
             switch(key) {
               case 'frac': {
-                int numeratorLength = TexUtils.getCorrespondParenthesesContentSize(widget.input.substring(i+key.length+1, widget.input.length));
+                int numeratorLength = TexUtils.getCorrespondParenthesesContentSize(input.substring(i+key.length+1, input.length));
 
                 int denominatorStartIndex = i + key.length + numeratorLength + 2 + 1;
-                int denominatorLength = TexUtils.getCorrespondParenthesesContentSize(widget.input.substring(denominatorStartIndex, widget.input.length));
+                int denominatorLength = TexUtils.getCorrespondParenthesesContentSize(input.substring(denominatorStartIndex, input.length));
 
-                String numerator = widget.input.substring(i+key.length+2, i+key.length+numeratorLength+1);
-                String denominator = widget.input.substring(denominatorStartIndex+1, denominatorStartIndex+denominatorLength+1);
+                String numerator = input.substring(i+key.length+2, i+key.length+numeratorLength+1);
+                String denominator = input.substring(denominatorStartIndex+1, denominatorStartIndex+denominatorLength+1);
                 result.add(TexFrac(TexView(numerator), TexView(denominator)));
 
                 // 2代表一組大括弧
@@ -149,8 +151,8 @@ class _TexViewState extends State<TexView> implements Parser {
           }
         } break;
         default: {
-          text += widget.input[i];
-          if (i == widget.input.length - 1) {
+          text += input[i];
+          if (i == input.length - 1) {
             children.add(TexText(text));
           }
         } break;
@@ -163,9 +165,9 @@ class _TexViewState extends State<TexView> implements Parser {
   String getKeyword(int startIndex) {
     String key = '';
 
-    for (int i = startIndex + 1; i < widget.input.length; i++) {
-      if (StringUtils.isAlpha(widget.input[i])) {
-        key += widget.input[i];
+    for (int i = startIndex + 1; i < input.length; i++) {
+      if (StringUtils.isAlpha(input[i])) {
+        key += input[i];
       } else {
         break;
       }

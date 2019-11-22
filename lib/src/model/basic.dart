@@ -135,7 +135,7 @@ class _TexViewState extends State<TexView> implements Parser {
                 int denominatorStartIndex = i + key.length + numeratorLength + 2 + 1;
                 int denominatorLength = TexUtils.getCorrespondParenthesesContentSize(input.substring(denominatorStartIndex, input.length));
 
-                String numerator = input.substring(i+key.length+2, i+key.length+numeratorLength+1);
+                String numerator = input.substring(i+key.length+2, i+key.length+numeratorLength+2);
                 String denominator = input.substring(denominatorStartIndex+1, denominatorStartIndex+denominatorLength+1);
                 children.add(TexFrac(TexView(numerator), TexView(denominator)));
 
@@ -144,12 +144,10 @@ class _TexViewState extends State<TexView> implements Parser {
                 i += denominatorLength + 2;
               } break;
             }
-            // TODO: i += len
           }
         } break;
         default: {
           text += input[i];
-          print('i: $i, input len: ${input.length}');
           if (i == input.length - 1) {
             children.add(TexText(text));
           }
@@ -183,6 +181,4 @@ class _TexViewState extends State<TexView> implements Parser {
       ],
     );
   }
-
-// build => wrap > row > itemBuilder > children
 }

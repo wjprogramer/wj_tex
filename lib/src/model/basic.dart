@@ -6,6 +6,11 @@ import 'package:wj_tex/src/utils/tex_utils.dart';
 /// -----------------------------------------------------
 /// VARIABLES
 
+TextStyle texTexStyle = TextStyle(
+  fontSize: 10,
+  fontFamily: 'CMU Serif Extra',
+);
+
 Map specialCharMap = {
   'sigma': '∑',
   'alpha': 'α'
@@ -32,23 +37,20 @@ class TexText extends StatelessWidget implements Tex {
 
   @override
   Widget build(BuildContext context) {
-    return Text(input);
+    return Text(input, style: texTexStyle,);
   }
 }
 
 /// WIDGET
 
 class TexFrac extends StatelessWidget implements Tex {
-
   // 分子
   final Widget numerator;
 
   // 分母
   final Widget denominator;
 
-  TexFrac(this.numerator, this.denominator) {
-    print('TexFrac: $numerator / $denominator');
-  }
+  TexFrac(this.numerator, this.denominator);
 
   @override
   Widget build(BuildContext context) {

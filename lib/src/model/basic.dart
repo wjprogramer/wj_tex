@@ -14,7 +14,7 @@ Map specialCharMap = {
 /// -----------------------------------------------------
 /// ABSTRACT CLASS
 
-abstract class Tex { }
+abstract class Tex extends Widget { }
 
 abstract class Parser {
   List<Tex> parser();
@@ -89,7 +89,7 @@ class _TexViewState extends State<TexView> implements Parser {
 
   @override
   void initState() {
-    // TODO: implement initState
+    // 需初始化
     super.initState();
   }
 
@@ -169,8 +169,13 @@ class _TexViewState extends State<TexView> implements Parser {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: 計算寬高
-    return null;
+    return Wrap(
+      children: <Widget>[
+        Row(
+          children: children,
+        ),
+      ],
+    );
   }
 
 // build => wrap > row > itemBuilder > children

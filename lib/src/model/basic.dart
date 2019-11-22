@@ -89,21 +89,18 @@ class _TexViewState extends State<TexView> implements Parser {
 
   String input;
 
-  _TexViewState(this.input) {
+  _TexViewState(this.input);
+
+  @override
+  void initState() {
+    super.initState();
     if (input.isNotEmpty) {
       children = parser();
     }
   }
 
   @override
-  void initState() {
-    // 需初始化
-    super.initState();
-  }
-
-  @override
   List<Tex> parser() {
-    List<Tex> result = List();
     String text = '';
 
     for (int i = 0; i < input.length; i++) {
@@ -140,7 +137,7 @@ class _TexViewState extends State<TexView> implements Parser {
 
                 String numerator = input.substring(i+key.length+2, i+key.length+numeratorLength+1);
                 String denominator = input.substring(denominatorStartIndex+1, denominatorStartIndex+denominatorLength+1);
-                result.add(TexFrac(TexView(numerator), TexView(denominator)));
+                children.add(TexFrac(TexView(numerator), TexView(denominator)));
 
                 // 2代表一組大括弧
                 i += key.length + numeratorLength + 2;
@@ -159,7 +156,7 @@ class _TexViewState extends State<TexView> implements Parser {
         } break;
       }
     }
-    return result;
+    return children;
   }
 
   // startIndex為反斜線的index

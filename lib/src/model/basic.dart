@@ -52,7 +52,7 @@ class TexText extends StatelessWidget implements Tex {
 
 class TexLim extends StatelessWidget implements Tex {
 
-  final Widget subscript;
+  final String subscript;
 
   final TextStyle style;
 
@@ -63,12 +63,16 @@ class TexLim extends StatelessWidget implements Tex {
 
   @override
   Widget build(BuildContext context) {
+    var limStyle = style.copyWith(
+      fontSize: style.fontSize * 0.6
+    );
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       // crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         TexText('lim', style: style,),
-        subscript
+        TexText(subscript, style: limStyle,)
       ],
     );
   }
@@ -218,7 +222,7 @@ class _TexViewState extends State<TexView> implements Parser {
                 int argLength = TexUtils.getCorrespondParenthesesContentSize(input.substring(i+key.length+1, input.length));
 
                 String arg = input.substring(i + key.length + 2, i + key.length + argLength+2);
-                children.add(TexUtils.getSingleBracketsWidget(key, TexView(arg, style: style,)));
+                children.add(TexUtils.getSingleBracketsWidget(key, arg, style: style));
 
                 // 2代表一組大括弧
                 i += key.length + argLength + 2;

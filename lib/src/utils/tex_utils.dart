@@ -26,7 +26,7 @@ class TexUtils {
   }
 
   /// 取得 擁有一組大括弧參數的widget
-  static Tex getSingleBracketsWidget(String key, Tex arg, {TextStyle style = texTexStyle}) {
+  static Tex getSingleBracketsWidget(String key, String arg, {TextStyle style = texTexStyle}) {
     switch(key) {
       case 'overrightarrow': {
 
@@ -41,10 +41,7 @@ class TexUtils {
 
       } break;
       case 'lim': {
-        TextStyle limStyle = style.copyWith(
-          fontSize: style.fontSize * 0.4
-        );
-        return TexLim(arg, style: limStyle,);
+        return TexLim(arg, style: style,);
       } break;
       default: {
 

@@ -118,6 +118,7 @@ class TexFrac extends StatelessWidget implements Tex {
             ),
           ),
           new Container(
+            color: Colors.amber,
             child: denominator,
           ),
         ],
@@ -292,6 +293,7 @@ class _TexViewState extends State<TexView> implements Parser {
 //      children: children // TODO: 應該不需要包 Row  或  IntrinsicHeight了?  確認之後刪除
 //    );
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: children.map( (child) {
         return Row(
           children: <Widget>[

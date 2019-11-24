@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:wj_tex/src/utils/string_utils.dart';
 import 'package:wj_tex/src/utils/tex_utils.dart';
 
-
 /// -----------------------------------------------------
 /// VARIABLES
 
-TextStyle texTexStyle = TextStyle(
-  fontSize: 10,
+const TextStyle texTexStyle = TextStyle(
+  fontSize: 15,
   fontFamily: 'CmuSerifExtra',
 );
 
@@ -26,18 +25,52 @@ abstract class Parser {
 }
 
 /// -----------------------------------------------------
+
 /// WIDGET
+
+
 
 class TexText extends StatelessWidget implements Tex {
   final String input;
 
-  TexText(this.input) {
+  final TextStyle style;
+
+  TexText(
+    this.input, {
+    this.style = texTexStyle
+  }) {
     print('TexText: $input');
   }
 
   @override
   Widget build(BuildContext context) {
-    return Text(input, style: texTexStyle,);
+    return Text(input, style: style,);
+  }
+}
+
+/// WIDGET
+
+class TexLim extends StatelessWidget implements Tex {
+
+  final Widget subscript;
+
+  final TextStyle style;
+
+  TexLim(
+    this.subscript, {
+    this.style = texTexStyle
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      // crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        TexText('lim', style: style,),
+        subscript
+      ],
+    );
   }
 }
 
@@ -50,7 +83,14 @@ class TexFrac extends StatelessWidget implements Tex {
   // 分母
   final Widget denominator;
 
-  TexFrac(this.numerator, this.denominator);
+  final TextStyle style;
+
+  TexFrac(
+    this.numerator,
+    this.denominator, {
+      this.style = texTexStyle
+    }
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -70,11 +110,11 @@ class TexFrac extends StatelessWidget implements Tex {
             ),
             child: Align(
               alignment: Alignment.center,
-              child: TexText('32131cqcqc'),
+              child: numerator,
             ),
           ),
           new Container(
-            child: TexText('dqw'),
+            child: denominator,
           ),
         ],
       ),
@@ -82,17 +122,20 @@ class TexFrac extends StatelessWidget implements Tex {
   }
 }
 
-/// WIDGET
+/// MAIN WIDGET
 
 class TexView extends StatefulWidget implements Tex {
   final String input;
 
-  TexView(this.input) {
-    print('TexView: $input');
-  }
+  final TextStyle style;
+
+  TexView(
+    this.input, {
+    this.style = texTexStyle
+  });
 
   @override
-  _TexViewState createState() => _TexViewState(input);
+  _TexViewState createState() => _TexViewState(input, style: style);
 }
 
 class _TexViewState extends State<TexView> implements Parser {
@@ -100,7 +143,12 @@ class _TexViewState extends State<TexView> implements Parser {
 
   String input;
 
-  _TexViewState(this.input);
+  TextStyle style;
+
+  _TexViewState(
+    this.input, {
+    this.style = texTexStyle,
+  });
 
   @override
   void initState() {
@@ -117,52 +165,102 @@ class _TexViewState extends State<TexView> implements Parser {
     for (int i = 0; i < input.length; i++) {
       switch(input[i]) {
         case '{': {
-          if (StringUtils.isNotNullOrEmpty(text)) {
+          // region 尋找一般分組
+          if (text.isNotEmpty) {
             children.add(TexText(text));
             text = '';
           }
 
-          // 大括弧內的內容長度
           int contentSize = TexUtils.getCorrespondParenthesesContentSize(input.substring(i, input.length));
           i += contentSize + 1; // 1代表後大括弧
-          children.add(TexView(input.substring(i+1, i+contentSize+1)));
+          children.add(TexView(input.substring(i+1, i+contentSize+1), style: style,));
         } break;
+        // endregion
         case '\\': {
+          // region 找關鍵字
           String key = getKeyword(i);
 
           if (specialCharMap.containsKey(key) || key.length == 1) {
             text += specialCharMap[key] ?? key;
             i += key.length;
           } else {
-            if (StringUtils.isNotNullOrEmpty(text)) {
-              children.add(TexText(text));
+            if (text.isNotEmpty) {
+              children.add(TexText(text, style: style,));
               text = '';
             }
 
             switch(key) {
+              /// 未來如果有 \key{...}{...} 形式的語法，放到case 'frac' 上面，並且，[TexUtils].getDoubleBracketsWidget也要新增
               case 'frac': {
-                int numeratorLength = TexUtils.getCorrespondParenthesesContentSize(input.substring(i+key.length+1, input.length));
+                //region 屬於包含兩個`{}`參數的key
+                int arg1Length = TexUtils.getCorrespondParenthesesContentSize(input.substring(i+key.length+1, input.length));
 
-                int denominatorStartIndex = i + key.length + numeratorLength + 2 + 1;
-                int denominatorLength = TexUtils.getCorrespondParenthesesContentSize(input.substring(denominatorStartIndex, input.length));
+                int arg2StartIndex = i + key.length + arg1Length + 2 + 1;
+                int arg2Length = TexUtils.getCorrespondParenthesesContentSize(input.substring(arg2StartIndex, input.length));
 
-                String numerator = input.substring(i+key.length+2, i+key.length+numeratorLength+2);
-                String denominator = input.substring(denominatorStartIndex+1, denominatorStartIndex+denominatorLength+1);
-                children.add(TexFrac(TexView(numerator), TexView(denominator)));
+                String arg1 = input.substring(i+key.length+2, i+key.length+arg1Length+2);
+                String arg2 = input.substring(arg2StartIndex+1, arg2StartIndex+arg2Length+1);
+                // TODO: delete
+                // children.add(TexFrac(TexView(arg1), TexView(arg2)));
+                children.add(TexUtils.getDoubleBracketsWidget(key, TexView(arg1, style: style,), TexView(arg2, style: style,)));
 
                 // 2代表一組大括弧
-                i += key.length + numeratorLength + 2;
-                i += denominatorLength + 2;
+                i += key.length + arg1Length + 2;
+                i += arg2Length + 2;
+                //endregion
+              } break;
+              case 'overrightarrow':
+              case 'underline': // TODO: 底線+分數 的時候，會不會有問題? 線疊在一起之類的問題?
+              case 'overline':
+              case 'widehat':
+              case 'lim': {
+                // region 屬於包含一個`{}`參數的key
+                int argLength = TexUtils.getCorrespondParenthesesContentSize(input.substring(i+key.length+1, input.length));
+
+                String arg = input.substring(i + key.length + 2, i + key.length + argLength+2);
+                children.add(TexUtils.getSingleBracketsWidget(key, TexView(arg, style: style,)));
+
+                // 2代表一組大括弧
+                i += key.length + argLength + 2;
+              } break;
+              // endregion
+              case 'sqrt': {
+
+              } break;
+              default: {
+                // FIXME: 目前還沒有判斷 ，如果不是預設的key、也不是 special char 的情況
+                // region 如果沒輸入錯的話，照理來說不會到這邊
+                // endregion
               } break;
             }
           }
         } break;
-        default: {
-          text += input[i];
-          if (i == input.length - 1) {
-            children.add(TexText(text));
+        // endregion
+        case ' ': {
+          //region 空白不加入text
+          if (text.isNotEmpty) {
+            children.add(TexText(text, style: style,));
+            text = '';
           }
         } break;
+        //endregion
+        case '^': {
+          // region 上標 superscript
+
+        } break;
+        // endregion
+        case '_': {
+          // region 下標 Subscript
+        } break;
+        // endregion
+        default: {
+          //region 一般字元加入text
+          text += input[i];
+          if (i == input.length - 1) {
+            children.add(TexText(text, style: style,));
+          }
+        } break;
+        //endregion
       }
     }
     return children;
@@ -185,11 +283,7 @@ class _TexViewState extends State<TexView> implements Parser {
   @override
   Widget build(BuildContext context) {
     return Wrap(
-      children: <Widget>[
-        Row(
-          children: children,
-        ),
-      ],
+      children: children // TODO: 應該不需要包 Row  或  IntrinsicHeight了?  確認之後刪除
     );
   }
 }

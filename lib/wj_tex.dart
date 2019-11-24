@@ -5,11 +5,6 @@ export 'src/model/basic.dart';
 export 'src/utils/string_utils.dart';
 export 'src/utils/tex_utils.dart';
 
-
-
-
-
-
 ///// A Calculator.
 //class Calculator {
 //  /// Returns [value] plus 1.

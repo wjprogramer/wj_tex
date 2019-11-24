@@ -38,7 +38,7 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-    - family: 'CMU Serif Extra'
+    - family: CMU Serif Extra
       fonts:
         - asset: fonts/cmunsl.ttf
   #       - asset: fonts/Schyler-Italic.ttf

@@ -57,7 +57,7 @@ class TexFrac extends StatelessWidget implements Tex {
     return IntrinsicWidth(
       child: new Column(
 //        mainAxisSize: MainAxisSize.min,
-//        crossAxisAlignment: CrossAxisAlignment.stretch,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           new Container(
             decoration: new BoxDecoration(

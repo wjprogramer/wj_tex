@@ -68,10 +68,16 @@ class TexFrac extends StatelessWidget implements Tex {
                 ),
               ),
             ),
-            child: numerator,
+            child: Align(
+              alignment: Alignment.center,
+              child: numerator,
+            ),
           ),
           new Container(
-            child: denominator,
+            child: Align(
+              alignment: Alignment.center,
+              child: denominator
+            ),
           ),
         ],
       ),

@@ -8,7 +8,7 @@ import 'package:wj_tex/src/utils/tex_utils.dart';
 
 TextStyle texTexStyle = TextStyle(
   fontSize: 10,
-  fontFamily: 'CMU Serif Extra',
+  fontFamily: 'CmuSerifExtra',
 );
 
 Map specialCharMap = {

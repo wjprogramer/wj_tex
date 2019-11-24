@@ -64,7 +64,7 @@ class TexLim extends StatelessWidget implements Tex {
   @override
   Widget build(BuildContext context) {
     var limStyle = style.copyWith(
-      fontSize: style.fontSize * 0.6
+      fontSize: style.fontSize * 0.7
     );
 
     return Column(
@@ -287,6 +287,7 @@ class _TexViewState extends State<TexView> implements Parser {
   @override
   Widget build(BuildContext context) {
     return Wrap(
+      alignment: WrapAlignment.center,
       children: children // TODO: 應該不需要包 Row  或  IntrinsicHeight了?  確認之後刪除
     );
   }

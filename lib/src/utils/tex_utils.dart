@@ -41,7 +41,10 @@ class TexUtils {
 
       } break;
       case 'lim': {
-        return TexLim(arg, style: style,);
+        TextStyle limStyle = style.copyWith(
+          fontSize: style.fontSize * 0.4
+        );
+        return TexLim(arg, style: limStyle,);
       } break;
       default: {
 

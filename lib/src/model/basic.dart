@@ -54,32 +54,46 @@ class TexFrac extends StatelessWidget implements Tex {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Container(
-          decoration: BoxDecoration(
-            border: Border(
-              bottom: BorderSide(
-                color: Colors.black,
-                width: 1,
-              ),
-            ),
+    return IntrinsicWidth(
+      child: new Column(
+//        mainAxisSize: MainAxisSize.min,
+//        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          new Container(
+            decoration: new BoxDecoration(color: Colors.blue[200]),
+            child: numerator,
           ),
-          child: numerator,
-        ),
-        Container(
-          decoration: BoxDecoration(
-            border: Border(
-              top: BorderSide(
-                color: Colors.black,
-                width: 1,
-              ),
-            ),
+          new Container(
+            decoration: new BoxDecoration(color: Colors.green[200]),
+            child: denominator,
           ),
-          child: denominator,
-        ),
-      ],
+        ],
+      ),
     );
+//        Container(
+//          decoration: BoxDecoration(
+//            border: Border(
+//              bottom: BorderSide(
+//                color: Colors.black,
+//                width: 1,
+//              ),
+//            ),
+//          ),
+//          child: numerator,
+//        ),
+//        Container(
+//          decoration: BoxDecoration(
+//            border: Border(
+//              top: BorderSide(
+//                color: Colors.black,
+//                width: 1,
+//              ),
+//            ),
+//          ),
+//          child: denominator,
+//        ),
+//      ],
+//    );
   }
 }
 

@@ -56,7 +56,7 @@ class TexFrac extends StatelessWidget implements Tex {
   Widget build(BuildContext context) {
     return IntrinsicWidth(
       child: new Column(
-//        mainAxisSize: MainAxisSize.min,
+        // mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           new Container(
@@ -70,13 +70,11 @@ class TexFrac extends StatelessWidget implements Tex {
             ),
             child: Align(
               alignment: Alignment.center,
-              child: numerator,
+              child: TexText('32131cqcqc'),
             ),
           ),
           new Container(
-            child: Center(
-              child: denominator
-            ),
+            child: TexText('dqw'),
           ),
         ],
       ),

@@ -287,7 +287,7 @@ class _TexViewState extends State<TexView> implements Parser {
   @override
   Widget build(BuildContext context) {
     return Wrap(
-      alignment: WrapAlignment.center,
+      crossAxisAlignment: WrapCrossAlignment.center,
       children: children // TODO: 應該不需要包 Row  或  IntrinsicHeight了?  確認之後刪除
     );
   }

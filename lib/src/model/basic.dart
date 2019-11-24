@@ -104,6 +104,7 @@ class TexFrac extends StatelessWidget implements Tex {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           new Container(
+            alignment: Alignment.center,
             decoration: new BoxDecoration(
               border: Border(
                 bottom: BorderSide(
@@ -118,6 +119,7 @@ class TexFrac extends StatelessWidget implements Tex {
             ),
           ),
           new Container(
+            alignment: Alignment.center,
             color: Colors.amber,
             child: denominator,
           ),

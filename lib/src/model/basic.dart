@@ -60,40 +60,22 @@ class TexFrac extends StatelessWidget implements Tex {
 //        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           new Container(
-            decoration: new BoxDecoration(color: Colors.blue[200]),
+            decoration: new BoxDecoration(
+              border: Border(
+                bottom: BorderSide(
+                  color: Colors.black,
+                  width: 1,
+                ),
+              ),
+            ),
             child: numerator,
           ),
           new Container(
-            decoration: new BoxDecoration(color: Colors.green[200]),
             child: denominator,
           ),
         ],
       ),
     );
-//        Container(
-//          decoration: BoxDecoration(
-//            border: Border(
-//              bottom: BorderSide(
-//                color: Colors.black,
-//                width: 1,
-//              ),
-//            ),
-//          ),
-//          child: numerator,
-//        ),
-//        Container(
-//          decoration: BoxDecoration(
-//            border: Border(
-//              top: BorderSide(
-//                color: Colors.black,
-//                width: 1,
-//              ),
-//            ),
-//          ),
-//          child: denominator,
-//        ),
-//      ],
-//    );
   }
 }
 

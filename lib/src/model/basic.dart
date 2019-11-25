@@ -292,19 +292,20 @@ class _TexViewState extends State<TexView> implements Parser {
   @override
   Widget build(BuildContext context) {
     if (children.length > 1) {
-      return Wrap(
-          crossAxisAlignment: WrapCrossAlignment.center,
-          spacing: 3,
-          children: children // TODO: 應該不需要包 Row  或  IntrinsicHeight了?  確認之後刪除
+//      return Wrap(
+//          crossAxisAlignment: WrapCrossAlignment.center,
+//          spacing: 3,
+//          children: children // TODO: 應該不需要包 Row  或  IntrinsicHeight了?  確認之後刪除
+//      );
+      return Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: children
       );
     } else if (children.length == 1){
       return children[0];
     } else {
       return TexText('[empty]');
     }
-//    return Row(
-//      crossAxisAlignment: CrossAxisAlignment.center,
-//      children: children
-//    );
+
   }
 }

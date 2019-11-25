@@ -82,10 +82,10 @@ class TexLim extends StatelessWidget implements Tex {
 
 class TexFrac extends StatelessWidget implements Tex {
   // 分子
-  final Widget numerator;
+  final String numerator;
 
   // 分母
-  final Widget denominator;
+  final String denominator;
 
   final TextStyle style;
 
@@ -115,13 +115,13 @@ class TexFrac extends StatelessWidget implements Tex {
             ),
             child: Align(
               alignment: Alignment.center,
-              child: numerator,
+              child: TexView(numerator, style: style,),
             ),
           ),
           new Container(
             alignment: Alignment.center,
             color: Colors.amber,
-            child: denominator,
+            child: TexView(denominator, style: style,),
           ),
         ],
       ),
@@ -209,7 +209,7 @@ class _TexViewState extends State<TexView> implements Parser {
                 String arg2 = input.substring(arg2StartIndex+1, arg2StartIndex+arg2Length+1);
                 // TODO: delete
                 // children.add(TexFrac(TexView(arg1), TexView(arg2)));
-                children.add(TexUtils.getDoubleBracketsWidget(key, TexView(arg1, style: style,), TexView(arg2, style: style,)));
+                children.add(TexUtils.getDoubleBracketsWidget(key, arg1, arg2));
 
                 // 2代表一組大括弧
                 i += key.length + arg1Length + 2;
@@ -294,8 +294,6 @@ class _TexViewState extends State<TexView> implements Parser {
 //      spacing: 3,
 //      children: children // TODO: 應該不需要包 Row  或  IntrinsicHeight了?  確認之後刪除
 //    );
-
-
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,

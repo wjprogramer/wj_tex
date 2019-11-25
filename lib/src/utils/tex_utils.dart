@@ -51,7 +51,7 @@ class TexUtils {
   }
 
   /// 取得 擁有兩組大括弧參數的widget
-  static Tex getDoubleBracketsWidget(String key, Tex arg1, Tex arg2, {TextStyle style = texTexStyle}) {
+  static Tex getDoubleBracketsWidget(String key, String arg1, String arg2, {TextStyle style = texTexStyle}) {
     switch(key) {
       case 'frac': {
         return TexFrac(arg1, arg2, style: style,);

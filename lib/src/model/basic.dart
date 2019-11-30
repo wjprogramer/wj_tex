@@ -146,7 +146,7 @@ class TexView extends StatefulWidget implements Tex {
 }
 
 class _TexViewState extends State<TexView> implements Parser {
-  List<Widget> children = List();
+  List<Tex> children = List();
 
   String input;
 

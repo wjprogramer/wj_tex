@@ -299,7 +299,7 @@ class _TexViewState extends State<TexView> implements Parser {
 //      );
       return Row(
         crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
+//        mainAxisSize: MainAxisSize.min,
         children: children
       );
     } else if (children.length == 1){

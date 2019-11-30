@@ -163,11 +163,6 @@ class _TexViewState extends State<TexView> implements Parser {
   void initState() {
     super.initState();
     if (input.isNotEmpty) {
-      children.add(Expanded(
-        flex: 1,
-        child: Container(),
-      ));
-      
       children = parser();
     }
   }
@@ -304,6 +299,7 @@ class _TexViewState extends State<TexView> implements Parser {
 //      );
       return Row(
         crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: children
       );
     } else if (children.length == 1){

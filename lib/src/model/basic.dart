@@ -146,7 +146,7 @@ class TexView extends StatefulWidget implements Tex {
 }
 
 class _TexViewState extends State<TexView> implements Parser {
-  List<Tex> children = List();
+  List<Widget> children = List();
 
   String input;
 
@@ -163,6 +163,11 @@ class _TexViewState extends State<TexView> implements Parser {
   void initState() {
     super.initState();
     if (input.isNotEmpty) {
+      children.add(Expanded(
+        flex: 1,
+        child: Container(),
+      ));
+      
       children = parser();
     }
   }

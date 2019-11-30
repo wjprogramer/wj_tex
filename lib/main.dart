@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'wj_tex.dart';
+
+/// example
+
 void main() {
   runApp(MyApp());
 }
@@ -17,9 +21,7 @@ class DemoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Container(
-          color: Colors.black,
-        )
+        body: TexView(r''),
     );
   }
 }

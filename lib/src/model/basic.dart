@@ -18,27 +18,19 @@ Map specialCharMap = {
 /// -----------------------------------------------------
 /// ABSTRACT CLASS
 
-abstract class Tex extends Widget { }
-
-abstract class Parser {
-  List<Tex> parser();
-}
-
 /// -----------------------------------------------------
 
-/// WIDGET
+///  最底層 WIDGET
 
-
-
-class TexText extends StatelessWidget implements Tex {
+class TexText extends StatelessWidget {
   final String input;
 
   final TextStyle style;
 
   TexText(
-    this.input, {
-    this.style = texTexStyle
-  }) {
+      this.input, {
+        this.style = texTexStyle
+      }) {
     print('TexText: $input');
   }
 
@@ -48,23 +40,148 @@ class TexText extends StatelessWidget implements Tex {
   }
 }
 
-/// WIDGET
+/// 一個參數WIDGET
 
-class TexLim extends StatelessWidget implements Tex {
+class TexOverRightArrow extends StatelessWidget {
+  final String input;
+  final TextStyle style;
+
+  TexOverRightArrow(this.input, {this.style = texTexStyle});
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomPaint(
+      painter: _OverRightArrowPainter(),
+      child: TexView(input, style: style,),
+    );
+  }
+}
+
+class _OverRightArrowPainter extends CustomPainter {
+  Paint _rightArrowPaint;
+
+  _OverRightArrowPainter() {
+    _rightArrowPaint = Paint()
+      ..strokeWidth = 1.2;
+  }
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    canvas.drawLine(Offset(0, -2), Offset(size.width, -2), _rightArrowPaint);
+    canvas.drawLine(Offset(size.width - 5, -5), Offset(size.width, -2), _rightArrowPaint);
+    canvas.drawLine(Offset(size.width - 5, 1), Offset(size.width, -2), _rightArrowPaint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return false;
+  }
+
+}
+
+/// 一個參數WIDGET
+
+class TexUnderline extends StatelessWidget {
+  final String input;
+  final TextStyle style;
+
+  TexUnderline(this.input, {this.style = texTexStyle});
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomPaint(
+      /// @deprecated 原始版本 (原本外面還包著一層 padding, top:1)
+      //          decoration: new BoxDecoration(
+      //            border: Border(
+      //              bottom: BorderSide(color: Colors.black, width: 1),
+      //            ),
+      //          ),
+        painter: _UnderlinePainter(),
+        child: TexView(input, style: style,)
+    );
+  }
+}
+
+class _UnderlinePainter extends CustomPainter {
+  Paint _underlinePaint;
+
+  _UnderlinePainter() {
+    _underlinePaint = Paint()
+      ..strokeWidth = 1.2;
+  }
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    canvas.drawLine(Offset(0, size.height), Offset(size.width, size.height), _underlinePaint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return false;
+  }
+
+}
+
+/// 一個參數WIDGET
+
+class TexOverline extends StatelessWidget {
+  final String input;
+  final TextStyle style;
+
+  TexOverline(this.input, {this.style = texTexStyle});
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomPaint(
+      /// @deprecated原始版本 (原本外面還包著一層 padding, top:1)
+      //        decoration: new BoxDecoration(
+      //          border: Border(
+      //            top: BorderSide(color: Colors.black, width: 1),
+      //          ),
+      //        ),
+        painter: _OverlinePainter(),
+        child: TexView(input, style: style,)
+    );
+  }
+}
+
+class _OverlinePainter extends CustomPainter {
+  Paint _overlinePaint;
+
+  _OverlinePainter() {
+    _overlinePaint = Paint()
+      ..strokeWidth = 1.2;
+  }
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    canvas.drawLine(Offset(0, 0), Offset(size.width, 0), _overlinePaint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return false;
+  }
+
+}
+
+/// 一個參數WIDGET
+
+class TexLim extends StatelessWidget {
 
   final String subscript;
 
   final TextStyle style;
 
   TexLim(
-    this.subscript, {
-    this.style = texTexStyle
-  });
+      this.subscript, {
+        this.style = texTexStyle
+      });
 
   @override
   Widget build(BuildContext context) {
     var limStyle = style.copyWith(
-      fontSize: style.fontSize * 0.7
+        fontSize: style.fontSize * 0.7
     );
 
     return Column(
@@ -78,9 +195,10 @@ class TexLim extends StatelessWidget implements Tex {
   }
 }
 
-/// WIDGET
+/// 兩個參數 WIDGET
 
-class TexFrac extends StatelessWidget implements Tex {
+///
+class TexFrac extends StatelessWidget {
   // 分子
   final String numerator;
 
@@ -90,11 +208,11 @@ class TexFrac extends StatelessWidget implements Tex {
   final TextStyle style;
 
   TexFrac(
-    this.numerator,
-    this.denominator, {
-      this.style = texTexStyle
-    }
-  );
+      this.numerator,
+      this.denominator, {
+        this.style = texTexStyle
+      }
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +221,7 @@ class TexFrac extends StatelessWidget implements Tex {
         // mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          new Container(
+          Container(
             alignment: Alignment.center,
             decoration: new BoxDecoration(
               border: Border(
@@ -113,14 +231,19 @@ class TexFrac extends StatelessWidget implements Tex {
                 ),
               ),
             ),
-            child: Align(
-              alignment: Alignment.center,
-              child: TexView(numerator, style: style,),
+            child: Column(
+              children: <Widget>[
+                SizedBox(height: 6,), // 避免 overRightArrow 超出 widget
+                Align(
+                  alignment: Alignment.center,
+                  child: TexView(numerator, style: style,),
+                ),
+                SizedBox(height: 3,) // column, sizedBox作用: 避免 underline 會與「分數」(frac) 的線重疊
+              ],
             ),
           ),
           new Container(
             alignment: Alignment.center,
-            color: Colors.amber,
             child: TexView(denominator, style: style,),
           ),
         ],
@@ -129,24 +252,71 @@ class TexFrac extends StatelessWidget implements Tex {
   }
 }
 
+/// 兩個參數 (特殊) Widget
+
+///
+class TexScripts extends StatelessWidget {
+  final String superscript;
+  final String subscript;
+  final TextStyle style;
+
+  TexScripts({
+    this.superscript,
+    this.subscript,
+    this.style = texTexStyle
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    var scriptStyle = style.copyWith(
+        fontSize: style.fontSize * 0.5
+    );
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+//      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        _getSuperscript(scriptStyle: scriptStyle),
+        _getSubscript(scriptStyle: scriptStyle),
+      ],
+    );
+  }
+
+  Widget _getSuperscript({TextStyle scriptStyle}) {
+    if (StringUtils.isNotNullOrEmpty(superscript))
+      return TexView(superscript, style: scriptStyle,);
+    else
+      return Text('', style: scriptStyle,);
+  }
+
+  Widget _getSubscript({TextStyle scriptStyle}) {
+    if (StringUtils.isNotNullOrEmpty(subscript)) {
+      return TexView(subscript, style: scriptStyle,);
+    } else {
+      return Text('', style: scriptStyle,);
+    }
+  }
+
+}
+
 /// MAIN WIDGET
 
-class TexView extends StatefulWidget implements Tex {
+class TexView extends StatefulWidget {
   final String input;
 
   final TextStyle style;
 
   TexView(
-    this.input, {
-    this.style = texTexStyle
-  });
+      this.input, {
+        this.style = texTexStyle
+      });
 
   @override
   _TexViewState createState() => _TexViewState(input, style: style);
 }
 
-class _TexViewState extends State<TexView> implements Parser {
-  List<Tex> children = List();
+class _TexViewState extends State<TexView> {
+  List<Widget> children = List();
 
   String input;
 
@@ -155,20 +325,19 @@ class _TexViewState extends State<TexView> implements Parser {
 //  bool pureText = true;
 
   _TexViewState(
-    this.input, {
-    this.style = texTexStyle,
-  });
+      this.input, {
+        this.style = texTexStyle,
+      });
 
   @override
   void initState() {
     super.initState();
-    if (input.isNotEmpty) {
+    if (StringUtils.isNotNullOrEmpty(input)) {
       children = parser();
     }
   }
 
-  @override
-  List<Tex> parser() {
+  List<Widget> parser() {
     String text = '';
 
     for (int i = 0; i < input.length; i++) {
@@ -184,14 +353,20 @@ class _TexViewState extends State<TexView> implements Parser {
           i += contentSize + 1; // 1代表後大括弧
           children.add(TexView(input.substring(i+1, i+contentSize+1), style: style,));
         } break;
-        // endregion
+      // endregion
         case '\\': {
           // region 找關鍵字
           String key = getKeyword(i);
 
           if (specialCharMap.containsKey(key) || key.length == 1) {
             text += specialCharMap[key] ?? key;
+
             i += key.length;
+
+            if (i == input.length - 1) {
+              children.add(TexText(text, style: style,));
+              text = '';
+            }
           } else {
             if (text.isNotEmpty) {
               children.add(TexText(text, style: style,));
@@ -199,7 +374,7 @@ class _TexViewState extends State<TexView> implements Parser {
             }
 
             switch(key) {
-              /// 未來如果有 \key{...}{...} 形式的語法，放到case 'frac' 上面，並且，[TexUtils].getDoubleBracketsWidget也要新增
+            /// 未來如果有 \key{...}{...} 形式的語法，放到case 'frac' 上面，並且，[TexUtils].getDoubleBracketsWidget也要新增
               case 'frac': {
                 //region 屬於包含兩個`{}`參數的key
                 int arg1Length = TexUtils.getCorrespondParenthesesContentSize(input.substring(i+key.length+1, input.length));
@@ -209,8 +384,6 @@ class _TexViewState extends State<TexView> implements Parser {
 
                 String arg1 = input.substring(i+key.length+2, i+key.length+arg1Length+2);
                 String arg2 = input.substring(arg2StartIndex+1, arg2StartIndex+arg2Length+1);
-                // TODO: delete
-                // children.add(TexFrac(TexView(arg1), TexView(arg2)));
                 children.add(TexUtils.getDoubleBracketsWidget(key, arg1, arg2));
 
                 // 2代表一組大括弧
@@ -232,9 +405,8 @@ class _TexViewState extends State<TexView> implements Parser {
                 // 2代表一組大括弧
                 i += key.length + argLength + 2;
               } break;
-              // endregion
+            // endregion
               case 'sqrt': {
-
               } break;
               default: {
                 // FIXME: 目前還沒有判斷 ，如果不是預設的key、也不是 special char 的情況
@@ -244,32 +416,73 @@ class _TexViewState extends State<TexView> implements Parser {
             }
           }
         } break;
-        // endregion
+      // endregion
         case ' ': {
           //region 空白不加入text
-          if (text.isNotEmpty) {
+          if (text.isNotEmpty && i == input.length - 1) {
             children.add(TexText(text, style: style,));
             text = '';
           }
         } break;
-        //endregion
+      //endregion
         case '^': {
           // region 上標 superscript
+          if (text.isNotEmpty) {
+            children.add(TexText(text, style: style,));
+            text = '';
+          }
 
+          // arg1:上標, arg2:下標
+          int arg1Length = TexUtils.getCorrespondParenthesesContentSize(input.substring(i+1, input.length));
+
+          String superscript = input.substring(i+1+1, i+1+arg1Length+1);
+          String subscript = '';
+
+          int arg2StartIndex = i + 1 + arg1Length + 1 + 1; // i(^) + 1({) + content + 1(}) + 1(_)
+          if (input[arg2StartIndex] == '_') {
+            int arg2Length = TexUtils.getCorrespondParenthesesContentSize(input.substring(arg2StartIndex + 1, input.length));
+            subscript = input.substring(arg2StartIndex + 2, arg2StartIndex + 2 + arg2Length);
+            i += 1 + arg2Length + 2;
+          }
+
+          i += arg1Length + 2;
+
+          children.add(TexScripts(superscript: superscript, subscript: subscript, style: style,));
         } break;
-        // endregion
+      // endregion
         case '_': {
           // region 下標 Subscript
+          if (text.isNotEmpty) {
+            children.add(TexText(text, style: style,));
+            text = '';
+          }
+
+          // arg1:上標, arg2:下標
+          int arg1Length = TexUtils.getCorrespondParenthesesContentSize(input.substring(i+1, input.length));
+
+          String subscript = input.substring(i+1+1, i+1+arg1Length+1);
+          String superscript = '';
+
+          int arg2StartIndex = i + 1 + arg1Length + 1 + 1; // i(^) + 1({) + content + 1(}) + 1(_)
+          if (input[arg2StartIndex] == '^') {
+            int arg2Length = TexUtils.getCorrespondParenthesesContentSize(input.substring(arg2StartIndex + 1, input.length));
+            superscript = input.substring(arg2StartIndex + 2, arg2StartIndex + 2 + arg2Length);
+            i += 1 + arg2Length + 2;
+          }
+
+          i += arg1Length + 2;
+
+          children.add(TexScripts(superscript: superscript, subscript: subscript, style: style,));
         } break;
-        // endregion
+      // endregion
         default: {
           //region 一般字元加入text
           text += input[i];
-          if (i == input.length - 1) {
+          if (i == input.length - 1 ) {
             children.add(TexText(text, style: style,));
           }
         } break;
-        //endregion
+      //endregion
       }
     }
     return children;
@@ -292,15 +505,10 @@ class _TexViewState extends State<TexView> implements Parser {
   @override
   Widget build(BuildContext context) {
     if (children.length > 1) {
-//      return Wrap(
-//          crossAxisAlignment: WrapCrossAlignment.center,
-//          spacing: 3,
-//          children: children // TODO: 應該不需要包 Row  或  IntrinsicHeight了?  確認之後刪除
-//      );
       return Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-//        mainAxisSize: MainAxisSize.min,
-        children: children
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: TexUtils.getWidgetListWithSpace(children)
       );
     } else if (children.length == 1){
       return children[0];

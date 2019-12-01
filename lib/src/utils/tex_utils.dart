@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:wj_tex/wj_tex.dart';
 
+
 class TexUtils {
 
   /// 大括弧內的內容長度
@@ -26,16 +27,16 @@ class TexUtils {
   }
 
   /// 取得 擁有一組大括弧參數的widget
-  static Tex getSingleBracketsWidget(String key, String arg, {TextStyle style = texTexStyle}) {
+  static Widget getSingleBracketsWidget(String key, String arg, {TextStyle style = texTexStyle}) {
     switch(key) {
       case 'overrightarrow': {
-
+        return TexOverRightArrow(arg, style: style,);
       } break;
       case 'underline': {
-
+        return TexUnderline(arg, style: style,);
       } break;
       case 'overline': {
-
+        return TexOverline(arg, style: style);
       } break;
       case 'widehat': {
 
@@ -43,15 +44,13 @@ class TexUtils {
       case 'lim': {
         return TexLim(arg, style: style,);
       } break;
-      default: {
-
-      } break;
+      default: {}
     }
-    return TexText('error', style: style,);
+    return TexText('[error] $key', style: style,);
   }
 
   /// 取得 擁有兩組大括弧參數的widget
-  static Tex getDoubleBracketsWidget(String key, String arg1, String arg2, {TextStyle style = texTexStyle}) {
+  static Widget getDoubleBracketsWidget(String key, String arg1, String arg2, {TextStyle style = texTexStyle}) {
     switch(key) {
       case 'frac': {
         return TexFrac(arg1, arg2, style: style,);
@@ -62,5 +61,17 @@ class TexUtils {
     }
   }
 
+  static List<Widget> getWidgetListWithSpace(List<Widget> list) {
+    List<Widget> result = List();
+
+    for (int i = 0; i < list.length; i++) {
+      result.add(list[i]);
+      if (i != list.length - 1) {
+        result.add(SizedBox(width: 3,));
+      }
+    }
+
+    return result;
+  }
 
 }

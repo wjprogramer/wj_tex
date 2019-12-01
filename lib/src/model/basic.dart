@@ -16,12 +16,8 @@ Map specialCharMap = {
 };
 
 /// -----------------------------------------------------
-/// ABSTRACT CLASS
-
-/// -----------------------------------------------------
 
 ///  最底層 WIDGET
-
 class TexText extends StatelessWidget {
   final String input;
 
@@ -41,7 +37,6 @@ class TexText extends StatelessWidget {
 }
 
 /// 一個參數WIDGET
-
 class TexOverRightArrow extends StatelessWidget {
   final String input;
   final TextStyle style;
@@ -80,7 +75,6 @@ class _OverRightArrowPainter extends CustomPainter {
 }
 
 /// 一個參數WIDGET
-
 class TexUnderline extends StatelessWidget {
   final String input;
   final TextStyle style;
@@ -123,7 +117,6 @@ class _UnderlinePainter extends CustomPainter {
 }
 
 /// 一個參數WIDGET
-
 class TexOverline extends StatelessWidget {
   final String input;
   final TextStyle style;
@@ -166,7 +159,6 @@ class _OverlinePainter extends CustomPainter {
 }
 
 /// 一個參數WIDGET
-
 class TexLim extends StatelessWidget {
 
   final String subscript;
@@ -174,14 +166,14 @@ class TexLim extends StatelessWidget {
   final TextStyle style;
 
   TexLim(
-      this.subscript, {
-        this.style = texTexStyle
-      });
+    this.subscript, {
+    this.style = texTexStyle
+  });
 
   @override
   Widget build(BuildContext context) {
     var limStyle = style.copyWith(
-        fontSize: style.fontSize * 0.7
+      fontSize: style.fontSize * 0.7
     );
 
     return Column(
@@ -196,8 +188,83 @@ class TexLim extends StatelessWidget {
 }
 
 /// 兩個參數 WIDGET
+class TexSqrt extends StatelessWidget {
+  final String root;
+  final String input;
+  final TextStyle style;
 
-///
+  TexSqrt(
+    this.input, {
+    this.root = '',
+    this.style = texTexStyle
+  });
+
+  List<Widget> _getRoot() {
+    var rootStyle = style.copyWith(fontSize: style.fontSize * 0.7);
+
+    if (StringUtils.isNotNullOrEmpty(root)) {
+      return [
+        Spacer(flex: 1,),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            TexView(root, style: rootStyle,),
+            SizedBox(width: 7,)
+          ],
+        ),
+        SizedBox(height: 5,)
+      ];
+    } else {
+      return [
+        SizedBox(width: 10,)
+      ];
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return IntrinsicHeight(
+      child: Row(
+        children: <Widget>[
+          Container(
+            child: Column(
+              children: _getRoot(),
+            ),
+          ),
+          CustomPaint(
+            painter: _SqrtPainter(),
+            child: TexView(input, style: style,),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class _SqrtPainter extends CustomPainter {
+  var _sqrtPaint;
+
+  _SqrtPainter() {
+    _sqrtPaint = Paint()
+      ..strokeWidth = 1.2;
+  }
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    canvas.drawLine(Offset(0, -3), Offset(size.width, -3), _sqrtPaint);
+    canvas.drawLine(Offset(0, -3), Offset(-5, size.height), _sqrtPaint);
+    canvas.drawLine(Offset(-5, size.height), Offset(-10, size.height - 5), _sqrtPaint);
+    canvas.drawLine(Offset(0, 0), Offset(0, 0), _sqrtPaint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return false;
+  }
+
+}
+
+/// 兩個參數 WIDGET
 class TexFrac extends StatelessWidget {
   // 分子
   final String numerator;
@@ -208,11 +275,11 @@ class TexFrac extends StatelessWidget {
   final TextStyle style;
 
   TexFrac(
-      this.numerator,
-      this.denominator, {
-        this.style = texTexStyle
-      }
-      );
+    this.numerator,
+    this.denominator, {
+      this.style = texTexStyle
+    }
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -233,7 +300,7 @@ class TexFrac extends StatelessWidget {
             ),
             child: Column(
               children: <Widget>[
-                SizedBox(height: 6,), // 避免 overRightArrow 超出 widget
+                SizedBox(height: 2,), // 避免 overRightArrow 超出 widget
                 Align(
                   alignment: Alignment.center,
                   child: TexView(numerator, style: style,),
@@ -253,8 +320,6 @@ class TexFrac extends StatelessWidget {
 }
 
 /// 兩個參數 (特殊) Widget
-
-///
 class TexScripts extends StatelessWidget {
   final String superscript;
   final String subscript;
@@ -299,6 +364,7 @@ class TexScripts extends StatelessWidget {
 
 }
 
+/// -----------------------------------------------------
 /// MAIN WIDGET
 
 class TexView extends StatefulWidget {
@@ -307,9 +373,9 @@ class TexView extends StatefulWidget {
   final TextStyle style;
 
   TexView(
-      this.input, {
-        this.style = texTexStyle
-      });
+    this.input, {
+    this.style = texTexStyle
+  });
 
   @override
   _TexViewState createState() => _TexViewState(input, style: style);
@@ -325,9 +391,9 @@ class _TexViewState extends State<TexView> {
 //  bool pureText = true;
 
   _TexViewState(
-      this.input, {
-        this.style = texTexStyle,
-      });
+    this.input, {
+    this.style = texTexStyle,
+  });
 
   @override
   void initState() {
@@ -349,7 +415,7 @@ class _TexViewState extends State<TexView> {
             text = '';
           }
 
-          int contentSize = TexUtils.getCorrespondParenthesesContentSize(input.substring(i, input.length));
+          int contentSize = TexUtils.getSizeInCurlyBrackets(input.substring(i, input.length));
           i += contentSize + 1; // 1代表後大括弧
           children.add(TexView(input.substring(i+1, i+contentSize+1), style: style,));
         } break;
@@ -377,10 +443,10 @@ class _TexViewState extends State<TexView> {
             /// 未來如果有 \key{...}{...} 形式的語法，放到case 'frac' 上面，並且，[TexUtils].getDoubleBracketsWidget也要新增
               case 'frac': {
                 //region 屬於包含兩個`{}`參數的key
-                int arg1Length = TexUtils.getCorrespondParenthesesContentSize(input.substring(i+key.length+1, input.length));
+                int arg1Length = TexUtils.getSizeInCurlyBrackets(input.substring(i+key.length+1, input.length));
 
                 int arg2StartIndex = i + key.length + arg1Length + 2 + 1;
-                int arg2Length = TexUtils.getCorrespondParenthesesContentSize(input.substring(arg2StartIndex, input.length));
+                int arg2Length = TexUtils.getSizeInCurlyBrackets(input.substring(arg2StartIndex, input.length));
 
                 String arg1 = input.substring(i+key.length+2, i+key.length+arg1Length+2);
                 String arg2 = input.substring(arg2StartIndex+1, arg2StartIndex+arg2Length+1);
@@ -397,7 +463,7 @@ class _TexViewState extends State<TexView> {
               case 'widehat':
               case 'lim': {
                 // region 屬於包含一個`{}`參數的key
-                int argLength = TexUtils.getCorrespondParenthesesContentSize(input.substring(i+key.length+1, input.length));
+                int argLength = TexUtils.getSizeInCurlyBrackets(input.substring(i+key.length+1, input.length));
 
                 String arg = input.substring(i + key.length + 2, i + key.length + argLength+2);
                 children.add(TexUtils.getSingleBracketsWidget(key, arg, style: style));
@@ -407,6 +473,34 @@ class _TexViewState extends State<TexView> {
               } break;
             // endregion
               case 'sqrt': {
+                // region [特殊: 中括弧+大括弧]
+                String arg1 = '';
+                bool hasRoot = true;
+
+                int arg1Length = TexUtils.getSizeInSquareBrackets(input.substring(i+key.length+1, input.length));
+
+                if (arg1Length == 0) {
+                  // 代表沒有root
+                  hasRoot = false;
+                }
+
+                int arg2StartIndex = i + key.length + arg1Length + 1;
+                if (hasRoot) {
+                  arg2StartIndex += 2;
+                }
+                int arg2Length = TexUtils.getSizeInCurlyBrackets(input.substring(arg2StartIndex, input.length));
+
+
+                arg1 = input.substring(i+key.length+2, i+key.length+arg1Length+2);
+                String arg2 = input.substring(arg2StartIndex+1, arg2StartIndex+arg2Length+1);
+                children.add(TexUtils.getDoubleBracketsWidget(key, arg1, arg2));
+
+                // -- 計算i
+                if (hasRoot) {
+                  i += arg1Length + 2; // 2代表一組括弧
+                }
+                i += key.length;
+                i += arg2Length + 2;
               } break;
               default: {
                 // FIXME: 目前還沒有判斷 ，如果不是預設的key、也不是 special char 的情況
@@ -433,14 +527,14 @@ class _TexViewState extends State<TexView> {
           }
 
           // arg1:上標, arg2:下標
-          int arg1Length = TexUtils.getCorrespondParenthesesContentSize(input.substring(i+1, input.length));
+          int arg1Length = TexUtils.getSizeInCurlyBrackets(input.substring(i+1, input.length));
 
           String superscript = input.substring(i+1+1, i+1+arg1Length+1);
           String subscript = '';
 
           int arg2StartIndex = i + 1 + arg1Length + 1 + 1; // i(^) + 1({) + content + 1(}) + 1(_)
           if (input[arg2StartIndex] == '_') {
-            int arg2Length = TexUtils.getCorrespondParenthesesContentSize(input.substring(arg2StartIndex + 1, input.length));
+            int arg2Length = TexUtils.getSizeInCurlyBrackets(input.substring(arg2StartIndex + 1, input.length));
             subscript = input.substring(arg2StartIndex + 2, arg2StartIndex + 2 + arg2Length);
             i += 1 + arg2Length + 2;
           }
@@ -458,14 +552,14 @@ class _TexViewState extends State<TexView> {
           }
 
           // arg1:上標, arg2:下標
-          int arg1Length = TexUtils.getCorrespondParenthesesContentSize(input.substring(i+1, input.length));
+          int arg1Length = TexUtils.getSizeInCurlyBrackets(input.substring(i+1, input.length));
 
           String subscript = input.substring(i+1+1, i+1+arg1Length+1);
           String superscript = '';
 
           int arg2StartIndex = i + 1 + arg1Length + 1 + 1; // i(^) + 1({) + content + 1(}) + 1(_)
           if (input[arg2StartIndex] == '^') {
-            int arg2Length = TexUtils.getCorrespondParenthesesContentSize(input.substring(arg2StartIndex + 1, input.length));
+            int arg2Length = TexUtils.getSizeInCurlyBrackets(input.substring(arg2StartIndex + 1, input.length));
             superscript = input.substring(arg2StartIndex + 2, arg2StartIndex + 2 + arg2Length);
             i += 1 + arg2Length + 2;
           }

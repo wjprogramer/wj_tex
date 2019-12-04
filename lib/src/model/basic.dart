@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:wj_tex/src/utils/string_utils.dart';
-import 'package:wj_tex/src/utils/tex_utils.dart';
+import '../utils/string_utils.dart';
+import '../utils/tex_utils.dart';
 
 /// -----------------------------------------------------
 /// VARIABLES
@@ -11,8 +11,55 @@ const TextStyle texTexStyle = TextStyle(
 );
 
 Map specialCharMap = {
-  'sigma': '∑',
-  'alpha': 'α'
+  ' ' : ' ',
+  'Alpha':'Α',
+  'alpha':'α',
+  'Beta':'Β',
+  'beta':'β',
+  'Gamma':'Γ',
+  'gamma':'γ',
+  'Delta':'Δ',
+  'delta':'δ',
+  'Epsilon':'Ε',
+  'epsilon':'ε',
+  'Zeta':'Ζ',
+  'zeta':'ζ',
+  'Eta':'Η',
+  'eta':'η',
+  'Theta':'Θ',
+  'theta':'θ',
+  'Iota':'Ι',
+  'iota':'ι',
+  'Kappa':'Κ',
+  'kappa':'κ',
+  'Lambda':'Λ',
+  'lambda':'λ',
+  'Mu':'Μ',
+  'mu':'μ',
+  'Nu':'Ν',
+  'nu':'ν',
+  'Xi':'Ξ',
+  'xi':'ξ',
+  'Omicron':'Ο',
+  'omicron':'ο',
+  'Pi':'Π',
+  'pi':'π',
+  'Rho':'Ρ',
+  'rho':'ρ',
+  'Sigma':'Σ', // Σ∑
+  'sigma':'σ',
+  'Tau':'Τ',
+  'tau':'τ',
+  'Upsilon':'Υ',
+  'upsilon':'υ',
+  'Phi':'Φ',
+  'phi':'φ',
+  'Chi':'Χ',
+  'chi':'χ',
+  'Psi':'Ψ',
+  'psi':'ψ',
+  'Omega':'Ω',
+  'omega':'ω',
 };
 
 /// -----------------------------------------------------
@@ -24,11 +71,9 @@ class TexText extends StatelessWidget {
   final TextStyle style;
 
   TexText(
-      this.input, {
-        this.style = texTexStyle
-      }) {
-    print('TexText: $input');
-  }
+    this.input, {
+    this.style = texTexStyle
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -326,8 +371,8 @@ class TexScripts extends StatelessWidget {
   final TextStyle style;
 
   TexScripts({
-    this.superscript,
-    this.subscript,
+    this.superscript = '',
+    this.subscript = '',
     this.style = texTexStyle
   });
 
@@ -351,17 +396,16 @@ class TexScripts extends StatelessWidget {
     if (StringUtils.isNotNullOrEmpty(superscript))
       return TexView(superscript, style: scriptStyle,);
     else
-      return Text('', style: scriptStyle,);
+      return TexText('', style: scriptStyle,);
   }
 
   Widget _getSubscript({TextStyle scriptStyle}) {
     if (StringUtils.isNotNullOrEmpty(subscript)) {
       return TexView(subscript, style: scriptStyle,);
     } else {
-      return Text('', style: scriptStyle,);
+      return TexText('', style: scriptStyle,);
     }
   }
-
 }
 
 /// -----------------------------------------------------
@@ -502,6 +546,7 @@ class _TexViewState extends State<TexView> {
                 i += key.length;
                 i += arg2Length + 2;
               } break;
+              // endregion
               default: {
                 // FIXME: 目前還沒有判斷 ，如果不是預設的key、也不是 special char 的情況
                 // region 如果沒輸入錯的話，照理來說不會到這邊
@@ -532,10 +577,10 @@ class _TexViewState extends State<TexView> {
           String superscript = input.substring(i+1+1, i+1+arg1Length+1);
           String subscript = '';
 
-          int arg2StartIndex = i + 1 + arg1Length + 1 + 1; // i(^) + 1({) + content + 1(}) + 1(_)
-          if (input[arg2StartIndex] == '_') {
-            int arg2Length = TexUtils.getSizeInCurlyBrackets(input.substring(arg2StartIndex + 1, input.length));
-            subscript = input.substring(arg2StartIndex + 2, arg2StartIndex + 2 + arg2Length);
+          int arg2StartIndex = i + 1 + arg1Length + 1; // i(^) + 1({) + content.len + 1(})
+          if (arg2StartIndex + 1 <= input.length - 1 && input[arg2StartIndex + 1] == '_') {
+            int arg2Length = TexUtils.getSizeInCurlyBrackets(input.substring(arg2StartIndex + 2, input.length));
+            subscript = input.substring(arg2StartIndex + 3, arg2StartIndex + 3 + arg2Length);
             i += 1 + arg2Length + 2;
           }
 
@@ -557,10 +602,10 @@ class _TexViewState extends State<TexView> {
           String subscript = input.substring(i+1+1, i+1+arg1Length+1);
           String superscript = '';
 
-          int arg2StartIndex = i + 1 + arg1Length + 1 + 1; // i(^) + 1({) + content + 1(}) + 1(_)
-          if (input[arg2StartIndex] == '^') {
-            int arg2Length = TexUtils.getSizeInCurlyBrackets(input.substring(arg2StartIndex + 1, input.length));
-            superscript = input.substring(arg2StartIndex + 2, arg2StartIndex + 2 + arg2Length);
+          int arg2StartIndex = i + 1 + arg1Length + 1; // i(^) + 1({) + content + 1(})
+          if (arg2StartIndex + 1 <= input.length - 1 && input[arg2StartIndex + 1] == '^') {
+            int arg2Length = TexUtils.getSizeInCurlyBrackets(input.substring(arg2StartIndex + 2, input.length));
+            superscript = input.substring(arg2StartIndex + 3, arg2StartIndex + 3 + arg2Length);
             i += 1 + arg2Length + 2;
           }
 

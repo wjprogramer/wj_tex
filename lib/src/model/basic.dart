@@ -413,7 +413,6 @@ class TexScripts extends StatelessWidget {
 
 class TexView extends StatefulWidget {
   final String input;
-
   final TextStyle style;
 
   TexView(
@@ -427,12 +426,8 @@ class TexView extends StatefulWidget {
 
 class _TexViewState extends State<TexView> {
   List<Widget> children = List();
-
   String input;
-
   TextStyle style;
-
-//  bool pureText = true;
 
   _TexViewState(
     this.input, {
@@ -447,6 +442,14 @@ class _TexViewState extends State<TexView> {
     }
   }
 
+  String _processText(String text, {bool isLast = false}) {
+    if (text.isNotEmpty || isLast) {
+      children.add(TexText(text, style: style,));
+      text = '';
+    }
+    return text;
+  }
+
   List<Widget> parser() {
     String text = '';
 
@@ -454,14 +457,10 @@ class _TexViewState extends State<TexView> {
       switch(input[i]) {
         case '{': {
           // region 尋找一般分組
-          if (text.isNotEmpty) {
-            children.add(TexText(text));
-            text = '';
-          }
-
+          text = _processText(text);
           int contentSize = TexUtils.getSizeInCurlyBrackets(input.substring(i, input.length));
-          i += contentSize + 1; // 1代表後大括弧
           children.add(TexView(input.substring(i+1, i+contentSize+1), style: style,));
+          i += contentSize + 1; // 1代表後大括弧
         } break;
       // endregion
         case '\\': {
@@ -470,18 +469,10 @@ class _TexViewState extends State<TexView> {
 
           if (specialCharMap.containsKey(key) || key.length == 1) {
             text += specialCharMap[key] ?? key;
-
             i += key.length;
-
-            if (i == input.length - 1) {
-              children.add(TexText(text, style: style,));
-              text = '';
-            }
+            text = _processText(text, isLast: i == input.length - 1);
           } else {
-            if (text.isNotEmpty) {
-              children.add(TexText(text, style: style,));
-              text = '';
-            }
+            text = _processText(text);
 
             switch(key) {
             /// 未來如果有 \key{...}{...} 形式的語法，放到case 'frac' 上面，並且，[TexUtils].getDoubleBracketsWidget也要新增
@@ -518,15 +509,13 @@ class _TexViewState extends State<TexView> {
             // endregion
               case 'sqrt': {
                 // region [特殊: 中括弧+大括弧]
+                text = _processText(text);
+
                 String arg1 = '';
                 bool hasRoot = true;
 
                 int arg1Length = TexUtils.getSizeInSquareBrackets(input.substring(i+key.length+1, input.length));
-
-                if (arg1Length == 0) {
-                  // 代表沒有root
-                  hasRoot = false;
-                }
+                hasRoot = (arg1Length != 0);
 
                 int arg2StartIndex = i + key.length + arg1Length + 1;
                 if (hasRoot) {
@@ -534,15 +523,11 @@ class _TexViewState extends State<TexView> {
                 }
                 int arg2Length = TexUtils.getSizeInCurlyBrackets(input.substring(arg2StartIndex, input.length));
 
-
                 arg1 = input.substring(i+key.length+2, i+key.length+arg1Length+2);
                 String arg2 = input.substring(arg2StartIndex+1, arg2StartIndex+arg2Length+1);
                 children.add(TexUtils.getDoubleBracketsWidget(key, arg1, arg2));
 
-                // -- 計算i
-                if (hasRoot) {
-                  i += arg1Length + 2; // 2代表一組括弧
-                }
+                if (hasRoot) { i += arg1Length + 2; /* 2代表一組括弧 */ }
                 i += key.length;
                 i += arg2Length + 2;
               } break;
@@ -558,18 +543,12 @@ class _TexViewState extends State<TexView> {
       // endregion
         case ' ': {
           //region 空白不加入text
-          if (text.isNotEmpty && i == input.length - 1) {
-            children.add(TexText(text, style: style,));
-            text = '';
-          }
+          text = _processText(text);
         } break;
       //endregion
         case '^': {
           // region 上標 superscript
-          if (text.isNotEmpty) {
-            children.add(TexText(text, style: style,));
-            text = '';
-          }
+          text = _processText(text);
 
           // arg1:上標, arg2:下標
           int arg1Length = TexUtils.getSizeInCurlyBrackets(input.substring(i+1, input.length));
@@ -591,10 +570,7 @@ class _TexViewState extends State<TexView> {
       // endregion
         case '_': {
           // region 下標 Subscript
-          if (text.isNotEmpty) {
-            children.add(TexText(text, style: style,));
-            text = '';
-          }
+          text = _processText(text);
 
           // arg1:上標, arg2:下標
           int arg1Length = TexUtils.getSizeInCurlyBrackets(input.substring(i+1, input.length));
@@ -617,9 +593,8 @@ class _TexViewState extends State<TexView> {
         default: {
           //region 一般字元加入text
           text += input[i];
-          if (i == input.length - 1 ) {
-            children.add(TexText(text, style: style,));
-          }
+          bool isLast = i == input.length - 1;
+          if (isLast) { text = _processText(text, isLast: isLast); }
         } break;
       //endregion
       }
@@ -643,17 +618,14 @@ class _TexViewState extends State<TexView> {
 
   @override
   Widget build(BuildContext context) {
-    if (children.length > 1) {
+    if (children.length > 0) {
       return Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: TexUtils.getWidgetListWithSpace(children)
       );
-    } else if (children.length == 1){
-      return children[0];
     } else {
       return TexText('[empty]');
     }
-
   }
 }

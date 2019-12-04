@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:wj_tex/wj_tex.dart';
+
+import '../model/basic.dart';
 
 class TexUtils {
 
@@ -35,6 +36,11 @@ class TexUtils {
   /// [differenceNumber] 代表中括弧配對的相差數量
   static int getSizeInSquareBrackets(String input) {
     int differenceNumber = 0;
+
+    if (input[0] != '[') {
+      return 0;
+    }
+
     for (int i = 0; i < input.length; i++) {
       if (input[i] == '[') {
         differenceNumber ++;

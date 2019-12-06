@@ -59,6 +59,9 @@ class TexUtils {
   /// 取得 擁有一組大括弧參數的widget
   static Widget getSingleBracketsWidget(String key, String arg, {TextStyle style = texTexStyle}) {
     switch(key) {
+      case 'text': {
+        return TexText(arg, style: style,);
+      } break;
       case 'overrightarrow': {
         return TexOverRightArrow(arg, style: style,);
       } break;
@@ -76,7 +79,7 @@ class TexUtils {
       } break;
       default: {}
     }
-    return TexText('[error:$key]', style: style,);
+    return Text('[error:$key]', style: style,);
   }
 
   /// 取得 擁有兩組大括弧參數的widget
@@ -89,7 +92,7 @@ class TexUtils {
         return TexSqrt(arg2, root: arg1, style: style,);
       } break;
       default: {
-        return TexText('[error:$key]', style: style,);
+        return Text('[error:$key]', style: style,);
       } break;
     }
   }

@@ -6,8 +6,9 @@ import '../utils/tex_utils.dart';
 /// VARIABLES
 
 const TextStyle texTexStyle = TextStyle(
-  fontSize: 15,
-  fontFamily: 'CmuSerifExtra',
+    fontSize: 15,
+    fontFamily: 'CMU',
+    package: 'wj_tex'
 );
 
 Map specialCharMap = {
@@ -46,7 +47,7 @@ Map specialCharMap = {
   'pi':'π',
   'Rho':'Ρ',
   'rho':'ρ',
-  'Sigma':'Σ', // Σ∑
+  'Sigma':'Σ', // Σ?
   'sigma':'σ',
   'Tau':'Τ',
   'tau':'τ',
@@ -64,20 +65,19 @@ Map specialCharMap = {
 
 /// -----------------------------------------------------
 
-///  最底層 WIDGET
+/// 一個參數WIDGET
 class TexText extends StatelessWidget {
   final String input;
-
   final TextStyle style;
 
   TexText(
-    this.input, {
-    this.style = texTexStyle
-  });
+      this.input, {
+        this.style = texTexStyle
+      });
 
   @override
   Widget build(BuildContext context) {
-    return Text(input, style: style,);
+    return Text(input, style: style.copyWith(fontFamily: DefaultTextStyle.of(context).style.fontFamily),);
   }
 }
 
@@ -130,7 +130,7 @@ class TexUnderline extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomPaint(
       /// @deprecated 原始版本 (原本外面還包著一層 padding, top:1)
-      //          decoration: new BoxDecoration(
+      //          decoration: BoxDecoration(
       //            border: Border(
       //              bottom: BorderSide(color: Colors.black, width: 1),
       //            ),
@@ -172,7 +172,7 @@ class TexOverline extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomPaint(
       /// @deprecated原始版本 (原本外面還包著一層 padding, top:1)
-      //        decoration: new BoxDecoration(
+      //        decoration: BoxDecoration(
       //          border: Border(
       //            top: BorderSide(color: Colors.black, width: 1),
       //          ),
@@ -211,22 +211,22 @@ class TexLim extends StatelessWidget {
   final TextStyle style;
 
   TexLim(
-    this.subscript, {
-    this.style = texTexStyle
-  });
+      this.subscript, {
+        this.style = texTexStyle
+      });
 
   @override
   Widget build(BuildContext context) {
     var limStyle = style.copyWith(
-      fontSize: style.fontSize * 0.7
+        fontSize: style.fontSize * 0.7
     );
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       // crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        TexText('lim', style: style,),
-        TexText(subscript, style: limStyle,)
+        Text('lim', style: style,),
+        TexView(subscript, style: limStyle,)
       ],
     );
   }
@@ -239,10 +239,10 @@ class TexSqrt extends StatelessWidget {
   final TextStyle style;
 
   TexSqrt(
-    this.input, {
-    this.root = '',
-    this.style = texTexStyle
-  });
+      this.input, {
+        this.root = '',
+        this.style = texTexStyle
+      });
 
   List<Widget> _getRoot() {
     var rootStyle = style.copyWith(fontSize: style.fontSize * 0.7);
@@ -320,22 +320,22 @@ class TexFrac extends StatelessWidget {
   final TextStyle style;
 
   TexFrac(
-    this.numerator,
-    this.denominator, {
-      this.style = texTexStyle
-    }
-  );
+      this.numerator,
+      this.denominator, {
+        this.style = texTexStyle
+      }
+      );
 
   @override
   Widget build(BuildContext context) {
     return IntrinsicWidth(
-      child: new Column(
+      child: Column(
         // mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
             alignment: Alignment.center,
-            decoration: new BoxDecoration(
+            decoration: BoxDecoration(
               border: Border(
                 bottom: BorderSide(
                   color: Colors.black,
@@ -354,7 +354,7 @@ class TexFrac extends StatelessWidget {
               ],
             ),
           ),
-          new Container(
+          Container(
             alignment: Alignment.center,
             child: TexView(denominator, style: style,),
           ),
@@ -396,14 +396,14 @@ class TexScripts extends StatelessWidget {
     if (StringUtils.isNotNullOrEmpty(superscript))
       return TexView(superscript, style: scriptStyle,);
     else
-      return TexText('', style: scriptStyle,);
+      return Text('', style: scriptStyle,);
   }
 
   Widget _getSubscript({TextStyle scriptStyle}) {
     if (StringUtils.isNotNullOrEmpty(subscript)) {
       return TexView(subscript, style: scriptStyle,);
     } else {
-      return TexText('', style: scriptStyle,);
+      return Text('', style: scriptStyle,);
     }
   }
 }
@@ -416,9 +416,9 @@ class TexView extends StatefulWidget {
   final TextStyle style;
 
   TexView(
-    this.input, {
-    this.style = texTexStyle
-  });
+      this.input, {
+        this.style = texTexStyle
+      });
 
   @override
   _TexViewState createState() => _TexViewState(input, style: style);
@@ -430,9 +430,9 @@ class _TexViewState extends State<TexView> {
   TextStyle style;
 
   _TexViewState(
-    this.input, {
-    this.style = texTexStyle,
-  });
+      this.input, {
+        this.style = texTexStyle,
+      });
 
   @override
   void initState() {
@@ -444,7 +444,7 @@ class _TexViewState extends State<TexView> {
 
   String _processText(String text, {bool isLast = false}) {
     if (text.isNotEmpty || isLast) {
-      children.add(TexText(text, style: style,));
+      children.add(Text(text, style: style,));
       text = '';
     }
     return text;
@@ -485,13 +485,14 @@ class _TexViewState extends State<TexView> {
 
                 String arg1 = input.substring(i+key.length+2, i+key.length+arg1Length+2);
                 String arg2 = input.substring(arg2StartIndex+1, arg2StartIndex+arg2Length+1);
-                children.add(TexUtils.getDoubleBracketsWidget(key, arg1, arg2));
+                children.add(TexUtils.getDoubleBracketsWidget(key, arg1, arg2, style: style));
 
                 // 2代表一組大括弧
                 i += key.length + arg1Length + 2;
                 i += arg2Length + 2;
                 //endregion
               } break;
+              case 'text':
               case 'overrightarrow':
               case 'underline': // TODO: 底線+分數 的時候，會不會有問題? 線疊在一起之類的問題?
               case 'overline':
@@ -531,7 +532,7 @@ class _TexViewState extends State<TexView> {
                 i += key.length;
                 i += arg2Length + 2;
               } break;
-              // endregion
+            // endregion
               default: {
                 // FIXME: 目前還沒有判斷 ，如果不是預設的key、也不是 special char 的情況
                 // region 如果沒輸入錯的話，照理來說不會到這邊
@@ -625,7 +626,7 @@ class _TexViewState extends State<TexView> {
           children: TexUtils.getWidgetListWithSpace(children)
       );
     } else {
-      return TexText('[empty]');
+      return Text('[empty]');
     }
   }
 }

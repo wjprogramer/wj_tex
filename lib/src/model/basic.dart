@@ -374,7 +374,7 @@ class TexFrac extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       TexView(numerator, style: style,),
-//                      _emptyColumn(true),
+                      _emptyColumn(true),
                     ],
                   ),
                 ),
@@ -389,7 +389,7 @@ class TexFrac extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 TexView(denominator, style: style,),
-//                _emptyColumn(false),
+                _emptyColumn(false),
               ],
             ),
           ),

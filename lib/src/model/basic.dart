@@ -337,10 +337,10 @@ class TexFrac extends StatelessWidget {
       return SizedBox();
     }
 
-    List<Widget> emptyWidgets = List<Widget>.generate(maxDepth, (_) => Text('', style: style,))
+    List<Widget> emptyWidgets = List<Widget>.generate(maxDepth + 1, (_) => Text('', style: style,))
       ..add(SizedBox(
-        height: (dDepth - 1) * 3.0,
-      ));
+        height: (maxDepth - 1) * 3.0,
+      ))
 
     if ((isNumerator && nDepth < dDepth) || (!isNumerator && nDepth > dDepth)) {
       var emptyColumn = Column(

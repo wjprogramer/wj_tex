@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import '../utils/string_utils.dart';
 import '../utils/tex_utils.dart';
@@ -329,23 +331,25 @@ class TexFrac extends StatelessWidget {
     var nDepth = TexUtils.getFracDepth(numerator);
     var dDepth = TexUtils.getFracDepth(denominator);
 
-    List<Widget> emptyWidgets = List<Widget>.generate(dDepth, (_) => Text('', style: style,))
+    var maxDepth = max(dDepth, nDepth);
+
+    if (maxDepth <= 0) {
+      return SizedBox();
+    }
+
+    List<Widget> emptyWidgets = List<Widget>.generate(maxDepth, (_) => Text('', style: style,))
       ..add(SizedBox(
         height: (dDepth - 1) * 3.0,
       ));
 
-    var emptyColumn = Column(
-      mainAxisSize: MainAxisSize.min,
-      children: emptyWidgets,
-    );
-
-    if (isNumerator && nDepth < dDepth) {
+    if ((isNumerator && nDepth < dDepth) || (!isNumerator && nDepth > dDepth)) {
+      var emptyColumn = Column(
+        mainAxisSize: MainAxisSize.min,
+        children: emptyWidgets,
+      );
       return emptyColumn;
-    } else if (!isNumerator && nDepth > dDepth) {
-      return emptyColumn;
-    } else {
-      return SizedBox();
     }
+    return SizedBox();
   }
 
   @override

@@ -374,14 +374,7 @@ class TexFrac extends StatelessWidget {
                 SizedBox(height: 2,), // 避免 overRightArrow 超出 widget
                 Align(
                   alignment: Alignment.center,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      TexView(numerator, style: style,),
-//                      _emptyColumn(true),
-                    ],
-                  ),
+                  child: TexView(numerator, style: style,),
                 ),
                 SizedBox(height: 3,) // column, sizedBox作用: 避免 underline 會與「分數」(frac) 的線重疊
               ],
@@ -389,14 +382,7 @@ class TexFrac extends StatelessWidget {
           ),
           Container(
             alignment: Alignment.center,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                TexView(denominator, style: style,),
-//                _emptyColumn(false),
-              ],
-            ),
+            child: TexView(denominator, style: style,),
           ),
         ],
       ),

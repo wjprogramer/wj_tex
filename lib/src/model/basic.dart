@@ -66,11 +66,11 @@ Map specialCharMap = {
 /// -----------------------------------------------------
 
 /// 一個參數WIDGET
-class TexText extends StatelessWidget {
+class TexPlainText extends StatelessWidget {
   final String input;
   final TextStyle style;
 
-  TexText(
+  TexPlainText(
       this.input, {
         this.style = texTexStyle
       });
@@ -313,7 +313,6 @@ class _SqrtPainter extends CustomPainter {
 class TexFrac extends StatelessWidget {
   // 分子
   final String numerator;
-
   // 分母
   final String denominator;
 
@@ -325,6 +324,33 @@ class TexFrac extends StatelessWidget {
         this.style = texTexStyle
       }
       );
+
+  _emptyColumn(bool isNumerator) {
+    var nDepth = TexUtils.getFracDepth(numerator);
+    var dDepth = TexUtils.getFracDepth(denominator);
+
+    if (isNumerator && nDepth < dDepth) {
+      return Column(
+        children: [
+          ...List.generate(dDepth, (_) => Text('', style: style,)),
+          SizedBox(
+            height: (dDepth - 1) * 3.0,
+          ),
+        ],
+      );
+    } else if (!isNumerator && nDepth > dDepth) {
+      return Column(
+        children: [
+          ...List.generate(dDepth, (_) => Text('', style: style,)),
+          SizedBox(
+            height: (dDepth - 1) * 3.0,
+          ),
+        ],
+      );
+    } else {
+      return SizedBox();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -348,7 +374,14 @@ class TexFrac extends StatelessWidget {
                 SizedBox(height: 2,), // 避免 overRightArrow 超出 widget
                 Align(
                   alignment: Alignment.center,
-                  child: TexView(numerator, style: style,),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      TexView(numerator, style: style,),
+                      _emptyColumn(true),
+                    ],
+                  ),
                 ),
                 SizedBox(height: 3,) // column, sizedBox作用: 避免 underline 會與「分數」(frac) 的線重疊
               ],
@@ -356,7 +389,14 @@ class TexFrac extends StatelessWidget {
           ),
           Container(
             alignment: Alignment.center,
-            child: TexView(denominator, style: style,),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                TexView(denominator, style: style,),
+                _emptyColumn(false),
+              ],
+            ),
           ),
         ],
       ),
@@ -430,9 +470,9 @@ class _TexViewState extends State<TexView> {
   TextStyle style;
 
   _TexViewState(
-      this.input, {
-        this.style = texTexStyle,
-      });
+    this.input, {
+      this.style = texTexStyle,
+    });
 
   @override
   void initState() {
@@ -477,7 +517,7 @@ class _TexViewState extends State<TexView> {
             switch(key) {
             /// 未來如果有 \key{...}{...} 形式的語法，放到case 'frac' 上面，並且，[TexUtils].getDoubleBracketsWidget也要新增
               case 'frac': {
-                //region 屬於包含兩個`{}`參數的key
+                //region 包含兩個`{}`參數widget的key
                 int arg1Length = TexUtils.getSizeInCurlyBrackets(input.substring(i+key.length+1, input.length));
 
                 int arg2StartIndex = i + key.length + arg1Length + 2 + 1;
@@ -498,7 +538,7 @@ class _TexViewState extends State<TexView> {
               case 'overline':
               case 'widehat':
               case 'lim': {
-                // region 屬於包含一個`{}`參數的key
+                // region 包含一個`{}`參數widget的key
                 int argLength = TexUtils.getSizeInCurlyBrackets(input.substring(i+key.length+1, input.length));
 
                 String arg = input.substring(i + key.length + 2, i + key.length + argLength+2);
@@ -608,7 +648,7 @@ class _TexViewState extends State<TexView> {
     String key = '';
 
     for (int i = startIndex + 1; i < input.length; i++) {
-      if (StringUtils.isAlpha(input[i])) {
+      if (StringUtils.isAlphas(input[i])) {
         key += input[i];
       } else {
         break;
@@ -626,7 +666,7 @@ class _TexViewState extends State<TexView> {
           children: TexUtils.getWidgetListWithSpace(children)
       );
     } else {
-      return Text('[empty]');
+      return Text('');
     }
   }
 }

@@ -1,5 +1,9 @@
+/// TODO: 之後改用 package:wj_utils
 class StringUtils {
+
   static bool isAlpha(String input) => RegExp(r'^[a-zA-Z]+$').hasMatch(input);
+
+  static bool isAlphas(String input) => RegExp(r'[a-zA-Z]').hasMatch(input);
 
   static bool isAlphanumeric(String input) => RegExp(r'^[a-zA-Z0-9]+$').hasMatch(input);
 

@@ -335,6 +335,7 @@ class TexFrac extends StatelessWidget {
       ));
 
     var emptyColumn = Column(
+      mainAxisSize: MainAxisSize.min,
       children: emptyWidgets,
     );
 

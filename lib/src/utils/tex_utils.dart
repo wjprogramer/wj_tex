@@ -124,7 +124,7 @@ class TexUtils {
   // region 處理 widget
   /// For Row
   static List<Widget> getWidgetListWithSpace(List<Widget> list) {
-    List<Widget> result = List();
+    List<Widget> result = [];
 
     for (int i = 0; i < list.length; i++) {
       result.add(list[i]);

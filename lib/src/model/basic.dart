@@ -100,7 +100,7 @@ class TexOverRightArrow extends StatelessWidget {
 }
 
 class _OverRightArrowPainter extends CustomPainter {
-  Paint _rightArrowPaint;
+  late Paint _rightArrowPaint;
 
   _OverRightArrowPainter() {
     _rightArrowPaint = Paint()
@@ -144,7 +144,7 @@ class TexUnderline extends StatelessWidget {
 }
 
 class _UnderlinePainter extends CustomPainter {
-  Paint _underlinePaint;
+  late Paint _underlinePaint;
 
   _UnderlinePainter() {
     _underlinePaint = Paint()
@@ -186,7 +186,7 @@ class TexOverline extends StatelessWidget {
 }
 
 class _OverlinePainter extends CustomPainter {
-  Paint _overlinePaint;
+  late Paint _overlinePaint;
 
   _OverlinePainter() {
     _overlinePaint = Paint()
@@ -220,7 +220,7 @@ class TexLim extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var limStyle = style.copyWith(
-        fontSize: style.fontSize * 0.7
+        fontSize: style.fontSize! * 0.7
     );
 
     return Column(
@@ -247,7 +247,7 @@ class TexSqrt extends StatelessWidget {
       });
 
   List<Widget> _getRoot() {
-    var rootStyle = style.copyWith(fontSize: style.fontSize * 0.7);
+    var rootStyle = style.copyWith(fontSize: style.fontSize! * 0.7);
 
     if (StringUtils.isNotNullOrEmpty(root)) {
       return [
@@ -419,7 +419,7 @@ class TexScripts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var scriptStyle = style.copyWith(
-        fontSize: style.fontSize * 0.5
+        fontSize: style.fontSize! * 0.5
     );
 
     return Column(
@@ -432,14 +432,14 @@ class TexScripts extends StatelessWidget {
     );
   }
 
-  Widget _getSuperscript({TextStyle scriptStyle}) {
+  Widget _getSuperscript({TextStyle? scriptStyle}) {
     if (StringUtils.isNotNullOrEmpty(superscript))
       return TexView(superscript, style: scriptStyle,);
     else
       return Text('', style: scriptStyle,);
   }
 
-  Widget _getSubscript({TextStyle scriptStyle}) {
+  Widget _getSubscript({TextStyle? scriptStyle}) {
     if (StringUtils.isNotNullOrEmpty(subscript)) {
       return TexView(subscript, style: scriptStyle,);
     } else {
@@ -453,7 +453,7 @@ class TexScripts extends StatelessWidget {
 
 class TexView extends StatefulWidget {
   final String input;
-  final TextStyle style;
+  final TextStyle? style;
 
   TexView(
       this.input, {
@@ -465,9 +465,9 @@ class TexView extends StatefulWidget {
 }
 
 class _TexViewState extends State<TexView> {
-  List<Widget> children = List();
+  List<Widget> children = [];
   String input;
-  TextStyle style;
+  TextStyle? style;
 
   _TexViewState(
     this.input, {
@@ -525,7 +525,7 @@ class _TexViewState extends State<TexView> {
 
                 String arg1 = input.substring(i+key.length+2, i+key.length+arg1Length+2);
                 String arg2 = input.substring(arg2StartIndex+1, arg2StartIndex+arg2Length+1);
-                children.add(TexUtils.getDoubleBracketsWidget(key, arg1, arg2, style: style));
+                children.add(TexUtils.getDoubleBracketsWidget(key, arg1, arg2, style: style!));
 
                 // 2代表一組大括弧
                 i += key.length + arg1Length + 2;
@@ -542,7 +542,7 @@ class _TexViewState extends State<TexView> {
                 int argLength = TexUtils.getSizeInCurlyBrackets(input.substring(i+key.length+1, input.length));
 
                 String arg = input.substring(i + key.length + 2, i + key.length + argLength+2);
-                children.add(TexUtils.getSingleBracketsWidget(key, arg, style: style));
+                children.add(TexUtils.getSingleBracketsWidget(key, arg, style: style!));
 
                 // 2代表一組大括弧
                 i += key.length + argLength + 2;
@@ -606,7 +606,7 @@ class _TexViewState extends State<TexView> {
 
           i += arg1Length + 2;
 
-          children.add(TexScripts(superscript: superscript, subscript: subscript, style: style,));
+          children.add(TexScripts(superscript: superscript, subscript: subscript, style: style!,));
         } break;
       // endregion
         case '_': {
@@ -628,7 +628,7 @@ class _TexViewState extends State<TexView> {
 
           i += arg1Length + 2;
 
-          children.add(TexScripts(superscript: superscript, subscript: subscript, style: style,));
+          children.add(TexScripts(superscript: superscript, subscript: subscript, style: style!,));
         } break;
       // endregion
         default: {

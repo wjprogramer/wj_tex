@@ -1,6 +1,5 @@
 library wj_tex;
 
-export 'src/model/basic.dart';
-
-export 'src/utils/string_utils.dart';
-export 'src/utils/tex_utils.dart';
+export 'widgets/widgets.dart';
+export 'utils/string_utils.dart';
+export 'utils/tex_utils.dart';

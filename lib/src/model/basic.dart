@@ -1,8 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import '../utils/string_utils.dart';
-import '../utils/tex_utils.dart';
+import 'package:wj_tex/wj_tex.dart';
 
 /// -----------------------------------------------------
 /// VARIABLES
@@ -249,7 +248,7 @@ class TexSqrt extends StatelessWidget {
   List<Widget> _getRoot() {
     var rootStyle = style.copyWith(fontSize: style.fontSize! * 0.7);
 
-    if (StringUtils.isNotNullOrEmpty(root)) {
+    if (root.isEmpty) {
       return [
         Spacer(flex: 1,),
         Row(
@@ -433,14 +432,14 @@ class TexScripts extends StatelessWidget {
   }
 
   Widget _getSuperscript({TextStyle? scriptStyle}) {
-    if (StringUtils.isNotNullOrEmpty(superscript))
+    if (superscript.isNotEmpty)
       return TexView(superscript, style: scriptStyle,);
     else
       return Text('', style: scriptStyle,);
   }
 
   Widget _getSubscript({TextStyle? scriptStyle}) {
-    if (StringUtils.isNotNullOrEmpty(subscript)) {
+    if (subscript.isNotEmpty) {
       return TexView(subscript, style: scriptStyle,);
     } else {
       return Text('', style: scriptStyle,);
@@ -477,7 +476,7 @@ class _TexViewState extends State<TexView> {
   @override
   void initState() {
     super.initState();
-    if (StringUtils.isNotNullOrEmpty(input)) {
+    if (input.isNotEmpty) {
       children = parser();
     }
   }

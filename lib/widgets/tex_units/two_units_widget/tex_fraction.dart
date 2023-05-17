@@ -1,13 +1,12 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:wj_tex/src/model/basic.dart';
-import 'package:wj_tex/src/model/data.dart';
-import 'package:wj_tex/src/utils/tex_utils.dart';
+import 'package:wj_tex/widgets/widgets.dart';
+import 'package:wj_tex/data/data.dart';
+import 'package:wj_tex/utils/tex_utils.dart';
 
-/// 兩個參數 WIDGET
 /// TODO: rename to TexFraction
-class TexFrac extends StatelessWidget {
+class TexFrac extends StatelessWidget implements TexTwoUnitsView {
   // 分子
   final String numerator;
   // 分母
@@ -19,8 +18,8 @@ class TexFrac extends StatelessWidget {
       this.numerator,
       this.denominator,
       {
-        this.style = texTexStyle,
-      });
+        TextStyle? style,
+      }): this.style = style ?? texTexStyle;
 
   Widget _emptyColumn(bool isNumerator) {
     var nDepth = TexUtils.getFracDepth(numerator);

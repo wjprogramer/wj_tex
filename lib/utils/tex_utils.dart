@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:wj_tex/src/model/data.dart';
-import 'package:wj_tex/src/utils/string_utils.dart';
+import 'package:wj_tex/data/data.dart';
+import 'package:wj_tex/utils/string_utils.dart';
 import 'package:wj_tex/widgets/tex_units/single_unit_widget/tex_over_right_arrow.dart';
 import 'package:wj_tex/widgets/tex_units/single_unit_widget/tex_underline.dart';
 import 'package:wj_tex/widgets/tex_units/two_units_widget/tex_fraction.dart';
@@ -10,6 +10,10 @@ import 'package:wj_tex/widgets/tex_units/single_unit_widget/tex_plain_text.dart'
 import 'package:wj_tex/widgets/tex_units/two_units_widget/tex_sqrt.dart';
 
 class TexUtils {
+
+  static TextStyle get _texTexStyle => TextStyle(
+    fontFamily: 'CmuSerifExtra',
+  );
 
   // Parentheses 括號
   // - curly brackets 大括號
@@ -86,43 +90,43 @@ class TexUtils {
   // region 根據 key 取得 widget
   // 例如: key為`frac`，會回傳Widget:TexFrac
   /// 取得 擁有一組大括弧參數的widget
-  static Widget getSingleBracketsWidget(String key, String arg, {TextStyle style = texTexStyle}) {
+  static Widget getSingleBracketsWidget(String key, String arg, {
+    TextStyle? style
+  }) {
+    final newStyle = style ?? _texTexStyle;
+
     switch(key) {
-      case 'text': {
-        return TexPlainText(arg, style: style,);
-      }
-      case 'overrightarrow': {
-        return TexOverRightArrow(arg, style: style,);
-      }
-      case 'underline': {
-        return TexUnderline(arg, style: style,);
-      }
-      case 'overline': {
-        return TexOverline(arg, style: style);
-      }
-      case 'widehat': {
+      case 'text':
+        return TexPlainText(arg, style: newStyle,);
+      case 'overrightarrow':
+        return TexOverRightArrow(arg, style: newStyle,);
+      case 'underline':
+        return TexUnderline(arg, style: newStyle,);
+      case 'overline':
+        return TexOverline(arg, style: newStyle);
+      case 'widehat':
         // 暫時未做
-      } break;
-      case 'lim': {
-        return TexLim(arg, style: style,);
-      }
+        break;
+      case 'lim':
+        return TexLim(arg, style: newStyle,);
       default: {}
     }
-    return Text('[error:$key]', style: style,);
+    return Text('[error:$key]', style: newStyle,);
   }
 
   /// 取得 擁有兩組大括弧參數的widget
-  static Widget getDoubleBracketsWidget(String key, String arg1, String arg2, {TextStyle style = texTexStyle}) {
+  static Widget getDoubleBracketsWidget(String key, String arg1, String arg2, {
+    TextStyle? style
+  }) {
+    final newStyle = style ?? _texTexStyle;
+
     switch(key) {
-      case 'frac': {
-        return TexFrac(arg1, arg2, style: style,);
-      }
-      case 'sqrt': {
-        return TexSqrt(arg2, root: arg1, style: style,);
-      }
-      default: {
-        return Text('[error:$key]', style: style,);
-      }
+      case 'frac':
+        return TexFrac(arg1, arg2, style: newStyle,);
+      case 'sqrt':
+        return TexSqrt(arg2, root: arg1, style: newStyle,);
+      default:
+        return Text('[error:$key]', style: newStyle,);
     }
   }
   // endregion
@@ -173,7 +177,7 @@ class TexUtils {
     return maxDepth;
   }
 
-  // startIndex為反斜線的index
+  /// startIndex為反斜線的index
   static String getKeyword(int startIndex, String input) {
     String key = '';
 
@@ -186,5 +190,5 @@ class TexUtils {
     }
     return key;
   }
-  //endregion
+
 }

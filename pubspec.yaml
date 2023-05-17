@@ -1,11 +1,11 @@
 name: wj_tex
 description: A new Flutter package project.
 version: 0.0.1
-author:
 homepage: https://github.com/wj-programer
+publish_to: 'none'
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: '>=2.18.1 <3.0.0'
 
 dependencies:
   flutter:
@@ -20,6 +20,8 @@ dev_dependencies:
 
 # The following section is specific to Flutter.
 flutter:
+
+  uses-material-design: true
 
   # To add assets to your package, add an assets section, like this:
   # assets:
@@ -37,10 +39,10 @@ flutter:
   # "family" key with the font family name, and a "assets.fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-#  assets.fonts:
-#    - family: CmuSerifExtra
-#      assets.fonts:
-#        - asset: assets.fonts/cmunsl.ttf
+  fonts:
+    - family: CmuSerifExtra
+      fonts:
+        - asset: assets/fonts/cmunsl.ttf
   #       - asset: assets.fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro

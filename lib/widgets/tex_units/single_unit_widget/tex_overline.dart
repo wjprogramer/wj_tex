@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:wj_tex/src/model/basic.dart';
-import 'package:wj_tex/src/model/data.dart';
+import 'package:wj_tex/widgets/widgets.dart';
+import 'package:wj_tex/data/data.dart';
 
-/// 一個參數WIDGET
-class TexOverline extends StatelessWidget {
+class TexOverline extends StatelessWidget implements TexSingleUnitView {
   final String input;
   final TextStyle style;
 
-  TexOverline(this.input, {this.style = texTexStyle});
+  TexOverline(this.input, {
+    TextStyle? style,
+  }): this.style = style ?? texTexStyle;
 
   @override
   Widget build(BuildContext context) {

@@ -1,8 +1,7 @@
 
 import 'package:flutter/material.dart';
 
-const texTexStyle = TextStyle(
-  fontSize: 15,
+TextStyle get texTexStyle => TextStyle(
   fontFamily: 'CmuSerifExtra',
 );
 

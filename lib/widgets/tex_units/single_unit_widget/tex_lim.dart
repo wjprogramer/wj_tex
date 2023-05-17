@@ -1,23 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:wj_tex/src/model/basic.dart';
-import 'package:wj_tex/src/model/data.dart';
+import 'package:wj_tex/data/data.dart';
+import 'package:wj_tex/widgets/widgets.dart';
 
-/// 一個參數WIDGET
-class TexLim extends StatelessWidget {
+class TexLim extends StatelessWidget implements TexSingleUnitView {
 
   final String subscript;
 
   final TextStyle style;
 
-  TexLim(
-      this.subscript, {
-        this.style = texTexStyle
-      });
+  TexLim(this.subscript, {
+    TextStyle? style,
+  }): this.style = style ?? texTexStyle;
 
   @override
   Widget build(BuildContext context) {
     var limStyle = style.copyWith(
-        fontSize: style.fontSize! * 0.7
+      fontSize: style.fontSize! * 0.7,
     );
 
     return Column(

@@ -25,24 +25,15 @@ class _HomePageState extends State<HomePage> {
           SizedBox(height: 24,),
           TexView(
             'Family \\frac{1}{2}',
-            // style: TextStyle(
-            //   fontSize: 15,
-            //   fontFamily: 'CmuSerifExtra',
-            // ),
           ),
           TexView(
             'Hello',
-            style: TextStyle(
-              fontSize: 15,
-              fontFamily: 'CmuSerifExtra',
-            ),
           ),
-          Text(
-            'Hello',
-            style: TextStyle(
-              fontFamily: 'CmuSerifExtra',
-              fontSize: 16,
-            ),
+          TexView(
+            '234^{2}_{33}',
+          ),
+          TexView(
+            '',
           ),
           SizedBox(height: 120,),
         ],

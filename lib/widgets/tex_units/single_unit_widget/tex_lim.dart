@@ -15,7 +15,7 @@ class TexLim extends StatelessWidget implements TexSingleUnitView {
   @override
   Widget build(BuildContext context) {
     var limStyle = style.copyWith(
-      fontSize: style.fontSize! * 0.7,
+      fontSize: (style.fontSize ?? 14.0) * 0.7,
     );
 
     return Column(

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 TextStyle get texTexStyle => TextStyle(
   fontFamily: 'CmuSerifExtra',
+  fontSize: 15,
 );
 
 const specialCharMap = <String, String>{

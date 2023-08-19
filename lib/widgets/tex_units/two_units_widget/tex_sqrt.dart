@@ -15,7 +15,7 @@ class TexSqrt extends StatelessWidget implements TexTwoUnitsView {
       }): this.style = style ?? texTexStyle;
 
   List<Widget> _getRoot() {
-    var rootStyle = style.copyWith(fontSize: style.fontSize! * 0.7);
+    var rootStyle = style.copyWith(fontSize: (style.fontSize ?? 14)! * 0.7);
 
     if (root.isNotEmpty) {
       return [

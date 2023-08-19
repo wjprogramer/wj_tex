@@ -219,7 +219,7 @@ class TexLim extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var limStyle = style.copyWith(
-        fontSize: style.fontSize! * 0.7
+        fontSize: (style.fontSize ?? 14.0) * 0.7
     );
 
     return Column(
@@ -246,7 +246,7 @@ class TexSqrt extends StatelessWidget {
       });
 
   List<Widget> _getRoot() {
-    var rootStyle = style.copyWith(fontSize: style.fontSize! * 0.7);
+    var rootStyle = style.copyWith(fontSize: (style.fontSize ?? 14)! * 0.7);
 
     if (root.isEmpty) {
       return [
@@ -418,7 +418,7 @@ class TexScripts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var scriptStyle = style.copyWith(
-        fontSize: style.fontSize! * 0.5
+        fontSize: (style.fontSize ?? 14.0) * 0.5
     );
 
     return Column(

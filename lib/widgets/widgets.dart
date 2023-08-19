@@ -1,5 +1,7 @@
 export 'base/tex_base_view.dart';
 
+export 'tex_units/override/tex_text.dart';
+
 export 'tex_units/single_unit_widget/tex_lim.dart';
 export 'tex_units/single_unit_widget/tex_over_right_arrow.dart';
 export 'tex_units/single_unit_widget/tex_overline.dart';

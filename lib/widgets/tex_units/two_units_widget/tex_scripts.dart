@@ -18,7 +18,7 @@ class TexScripts extends StatelessWidget implements TexTwoUnitsView {
   @override
   Widget build(BuildContext context) {
     var scriptStyle = style.copyWith(
-        fontSize: style.fontSize! * 0.5
+        fontSize: (style.fontSize ?? 14.0) * 0.5
     );
 
     return Column(
